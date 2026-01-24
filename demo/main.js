@@ -1,0 +1,61 @@
+import { EditorState } from '@codemirror/state';
+import { EditorView } from '@codemirror/view';
+import {
+  hybridMarkdown,
+  toolbar,
+  toggleTheme,
+  toggleHybridMode,
+} from '../lib/index.js';
+import 'katex/dist/katex.min.css';
+import './styles.css';
+import exampleContent from '../example.md?raw';
+
+// Create the editor
+const container = document.getElementById('app');
+
+// Create editor container structure
+const wrapper = document.createElement('div');
+wrapper.className = 'editor-wrapper';
+
+const editorContainer = document.createElement('div');
+editorContainer.className = 'editor-container';
+
+wrapper.appendChild(editorContainer);
+container.appendChild(wrapper);
+
+// Initialize editor with the extension
+const state = EditorState.create({
+  doc: exampleContent,
+  extensions: [
+    // The main hybrid markdown extension
+    hybridMarkdown({ theme: 'light' }),
+
+    // Optional: Add the toolbar with toggle callbacks
+    toolbar({
+      onToggleTheme: (view) => {
+        const isDark = toggleTheme(view);
+        document.body.classList.toggle('dark-mode', isDark);
+        return isDark;
+      },
+      onToggleMode: (view) => {
+        const isHybrid = toggleHybridMode(view);
+        document.body.classList.toggle('raw-mode', !isHybrid);
+        // Also toggle theme: raw mode = dark, hybrid mode = light
+        const isDark = toggleTheme(view);
+        document.body.classList.toggle('dark-mode', isDark);
+        return isHybrid;
+      },
+    }),
+  ],
+});
+
+const view = new EditorView({
+  state,
+  parent: editorContainer,
+});
+
+// Move selection to end and focus
+view.dispatch({
+  selection: { anchor: view.state.doc.length },
+});
+view.focus();
