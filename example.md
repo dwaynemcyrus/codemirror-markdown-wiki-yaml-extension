@@ -82,9 +82,6 @@ flowchart LR
     C -->|No| E[Show as<br/>Preview]
     D --> F[Better read/write<br/>experience]
     E --> F
-
-    classDef shadow fill:#fff,filter:drop-shadow(2px 2px 4px rgba(0,0,0,0.15))
-    class A,B,C,D,E,F shadow
 ```
 
 ---
