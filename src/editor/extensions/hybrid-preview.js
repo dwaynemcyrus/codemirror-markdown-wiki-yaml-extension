@@ -125,14 +125,39 @@ class MarkdownPreviewWidget extends WidgetType {
 
 /**
  * Get the set of line numbers that contain the cursor or selection
- * Only returns focused lines when the editor has focus
+ * Only returns focused lines when the editor is truly being edited (unless bypassFocusCheck is true)
+ * @param {EditorState} state - The editor state
+ * @param {EditorView|boolean} viewOrBypass - Either the view object for focus checking, or true to bypass focus check
  */
-function getFocusedLines(state, hasFocus) {
+function getFocusedLines(state, viewOrBypass) {
   const focused = new Set();
 
-  // If editor doesn't have focus, no lines are considered focused
+  // If viewOrBypass is true, bypass focus check (for code blocks, tables, math blocks)
+  if (viewOrBypass === true) {
+    // Always return focused lines based on selection only
+    for (const range of state.selection.ranges) {
+      const startLine = state.doc.lineAt(range.from).number;
+      const endLine = state.doc.lineAt(range.to).number;
+      for (let i = startLine; i <= endLine; i++) {
+        focused.add(i);
+      }
+    }
+    return focused;
+  }
+
+  // Otherwise, viewOrBypass should be a view object
+  const view = viewOrBypass;
+  
+  // Check if editor is truly focused by verifying activeElement
+  // This properly detects when keyboard is hidden on iOS
+  const isActivelyEditing = view.hasFocus && 
+    view.contentDOM && 
+    (document.activeElement === view.contentDOM || 
+     view.contentDOM.contains(document.activeElement));
+
+  // If editor isn't actively being edited, no lines are considered focused
   // This allows preview to render when keyboard is hidden (e.g., on iOS)
-  if (!hasFocus) {
+  if (!isActivelyEditing) {
     return focused;
   }
 
@@ -364,7 +389,7 @@ class TableWidget extends WidgetType {
  * Build decorations for all non-focused lines
  */
 function buildDecorations(state, view) {
-  const focusedLines = getFocusedLines(state, view.hasFocus);
+  const focusedLines = getFocusedLines(state, view);
   const codeBlockRanges = getCodeBlockRanges(state.doc);
   const tableRanges = getTableRanges(state.doc, codeBlockRanges);
   const mathBlockRanges = getMathBlockRanges(state.doc, codeBlockRanges);
