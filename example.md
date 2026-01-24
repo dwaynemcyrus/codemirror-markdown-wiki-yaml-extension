@@ -1,6 +1,6 @@
 # Hybrid Markdown Editor
 
-This is a **hybrid** markdown editor built with CodeMirror 6. It shows rendered preview for unfocused lines and raw markdown for the line you're editing. For usage instructions, check out the [GitHub repo](https://github.com/tiagosimoes/codemirror-markdown-hybrid).
+This is a **hybrid** markdown editor built with CodeMirror 6. It shows rendered preview for unfocused lines and raw markdown for the line you're editing. To use this in your own projects, check out the [GitHub repo](https://github.com/tiagosimoes/codemirror-markdown-hybrid).
 
 ## Features
 
