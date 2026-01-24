@@ -74,6 +74,7 @@ Supported emoji shortcodes: :smile: :heart: :rocket: :tada:
 ### Mermaid Diagrams
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'edgeLabelBackground': '#fff', 'primaryBorderColor': 'transparent', 'secondaryBorderColor': 'transparent', 'tertiaryBorderColor': 'transparent' }}}%%
 flowchart LR
     A[Markdown<br/>is awesome] --> B[CodeMirror<br/>is amazing]
     B --> C{Line focused?}
