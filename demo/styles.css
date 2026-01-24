@@ -53,8 +53,9 @@ body {
   stroke: #ddd !important;
 }
 
-.cm-mermaid-preview .edgeLabel {
-  background-color: #fff !important;
+.cm-mermaid-preview .edgeLabel rect,
+.cm-mermaid-preview .labelBkg {
+  fill: #fff !important;
 }
 
 .cm-mermaid-preview .flowchart-link {
