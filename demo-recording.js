@@ -46,6 +46,34 @@ async function runDemo() {
   
   const page = await context.newPage();
   
+  // Add custom cursor styling
+  await page.addStyleTag({
+    content: `
+      .pw-cursor {
+        position: fixed;
+        width: 12px;
+        height: 12px;
+        border: 2px solid red;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 999999;
+        transform: translate(-50%, -50%);
+      }
+    `
+  });
+  
+  // Add cursor tracking script
+  await page.addInitScript(() => {
+    const cursor = document.createElement('div');
+    cursor.className = 'pw-cursor';
+    document.body.appendChild(cursor);
+    
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+  });
+  
   // Navigate to the demo with #empty hash
   console.log('Navigating to demo page with empty editor...');
   await page.goto('http://localhost:5173/#empty');
