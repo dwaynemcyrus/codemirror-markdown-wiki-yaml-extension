@@ -45,10 +45,10 @@ async function runDemo() {
   });
 
   const context = await browser.newContext({
-    viewport: { width: 800, height: 1080 },
+    viewport: { width: 800, height: 1000 },
     recordVideo: {
       dir: './demo-video/',
-      size: { width: 800, height: 1080 }
+      size: { width: 800, height: 1000 }
     }
   });
 
@@ -143,10 +143,9 @@ async function runDemo() {
   await animateToAndClick(page.locator('button.cm-md-toolbar-btn[title*="Code Block"]'));
   await page.waitForTimeout(500);
 
-  // Go to absolute end of document and add space for table
+  // Go to absolute end of document
   await page.keyboard.press('Meta+ArrowDown');
   await page.keyboard.press('End');
-  await page.keyboard.press('Enter');
 
   // Click the Table button
   console.log('Clicking Table button...');
@@ -165,9 +164,9 @@ async function runDemo() {
   await animateToAndClick(page.locator('button.cm-md-toolbar-btn[title*="Diagram"]'));
   await page.waitForTimeout(500);
 
-  // Go to absolute end of document so diagram renders
-  await page.keyboard.press('Meta+ArrowDown');
-  await page.keyboard.press('End');
+  // Go up a bit so the diagram code is visible
+  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('ArrowUp');
 
   // Wait a bit to show the diagram code
   await page.waitForTimeout(2500);
