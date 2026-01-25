@@ -162,14 +162,14 @@ async function runDemo() {
   // Click the Diagram button
   console.log('Clicking Diagram button...');
   await animateToAndClick(page.locator('button.cm-md-toolbar-btn[title*="Diagram"]'));
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(1500);
 
   // Go up a bit so the diagram code is visible
   await page.keyboard.press('ArrowUp');
   await page.keyboard.press('ArrowUp');
 
   // Wait a bit to show the diagram code
-  await page.waitForTimeout(2500);
+  await page.waitForTimeout(1500);
 
   // Click on the unchecked checkbox (this moves cursor away, rendering the diagram)
   console.log('Clicking unchecked checkbox...');
