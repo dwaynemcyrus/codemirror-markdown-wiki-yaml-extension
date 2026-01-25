@@ -25,9 +25,9 @@ import { join } from 'path';
 // Note: "emoticons :smile:" is added at the end of the video to line 2 (before the "...")
 const demoContent = `# Hybrid Markdown Editor
 
-*Edit* and **preview** at the same time :tada:!
+*Edit* and **preview** at the same time!
 
-1. [x] ordered or unordered lists
+1. [x] lists
 [x] **bold**, *italic*...
 [ ] code, tables and diagrams
 `;
@@ -45,10 +45,10 @@ async function runDemo() {
   });
 
   const context = await browser.newContext({
-    viewport: { width: 850, height: 1080 },
+    viewport: { width: 800, height: 1080 },
     recordVideo: {
       dir: './demo-video/',
-      size: { width: 850, height: 1080 }
+      size: { width: 800, height: 1080 }
     }
   });
 
@@ -170,7 +170,7 @@ async function runDemo() {
   await page.keyboard.press('End');
 
   // Wait a bit to show the diagram code
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(1500);
 
   // Click on the unchecked checkbox (this moves cursor away, rendering the diagram)
   console.log('Clicking unchecked checkbox...');
