@@ -22,7 +22,7 @@ import { join } from 'path';
 // The content to type character by character
 // Note: After typing "1." and pressing Enter, CodeMirror auto-adds "2.", "3.", etc.
 // Note: All items except last have [x], last has [ ] which we check at the end
-// Note: "emoticons :smile:" is added at the end of the video to line 2 (before the "...")
+// Note: "emojis :smile:" is added at the end of the video to line 2 (before the "...")
 const demoContent = `# Hybrid Markdown Editor
 
 *Edit* and **preview** at the same time!
@@ -170,7 +170,7 @@ async function runDemo() {
   await page.keyboard.press('End');
 
   // Wait a bit to show the diagram code
-  await page.waitForTimeout(1500);
+  await page.waitForTimeout(2500);
 
   // Click on the unchecked checkbox (this moves cursor away, rendering the diagram)
   console.log('Clicking unchecked checkbox...');
@@ -178,9 +178,9 @@ async function runDemo() {
   await animateToAndClick(uncheckedCheckbox);
   await page.waitForTimeout(1000);
 
-  // Add "emoticons :smile:" before the "..." on line 2 of the list (last action)
+  // Add "emojis :smile:" before the "..." on line 2 of the list (last action)
   // Click at end of line 6 (the "*italic*..." line) instead of keyboard navigation
-  console.log('Adding emoticons :smile:...');
+  console.log('Adding emojis :smile:...');
 
   // Get the position just before "..." on line 6 (0-indexed: line 5)
   const clickPos = await page.evaluate(() => {
@@ -225,7 +225,7 @@ async function runDemo() {
 
   // Hide cursor while typing
   await page.evaluate(() => window.hideCursor());
-  await page.keyboard.type(', emoticons :smile:', { delay: TYPING_DELAY });
+  await page.keyboard.type(', emojis :smile:', { delay: TYPING_DELAY });
   await page.waitForTimeout(500);
 
   console.log('Demo recording complete!');
