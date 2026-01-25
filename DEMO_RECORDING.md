@@ -14,11 +14,12 @@ This Playwright script automates the process of creating a demo video for the Hy
    ## Features
 
    1. ordered or unordered lists
-   2. [ ] with tasks
-   3. **bold**, *italic*, etc...
-   4. emoticons :smile:
-   5. code, tables and diagrams
+   [ ] with tasks
+   **bold**, *italic*, etc...
+   emoticons :smile:
+   code, tables and diagrams
    ```
+   Note: After typing "1." and pressing Enter, the editor automatically numbers subsequent items as 2., 3., 4., 5.
 3. Clicks the Code Block button
 4. Clicks the Table button
 5. Clicks the Diagram button

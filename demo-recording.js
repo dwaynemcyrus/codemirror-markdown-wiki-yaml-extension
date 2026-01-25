@@ -17,6 +17,7 @@
 import { chromium } from '@playwright/test';
 
 // The content to type character by character
+// Note: After typing "1." and pressing Enter, CodeMirror auto-adds "2.", "3.", etc.
 const demoContent = `# Hybrid Markdown Editor
 
 *Edit* and **preview** markdown at the same time :tada:!
@@ -24,10 +25,10 @@ const demoContent = `# Hybrid Markdown Editor
 ## Features
 
 1. ordered or unordered lists
-2. [ ] with tasks
-3. **bold**, *italic*, etc...
-4. emoticons :smile:
-5. code, tables and diagrams
+[ ] with tasks
+**bold**, *italic*, etc...
+emoticons :smile:
+code, tables and diagrams
 `;
 
 async function runDemo() {
@@ -66,17 +67,37 @@ async function runDemo() {
   console.log('Content typed successfully');
   await page.waitForTimeout(1000);
   
+  // Move to end of document and add newlines to separate sections
+  await page.keyboard.press('End');
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Enter');
+  
   // Click the Code Block button (icon: "{ }")
   console.log('Clicking Code Block button...');
   const codeBlockButton = await page.locator('button.cm-md-toolbar-btn[title*="Code Block"]');
   await codeBlockButton.click();
   await page.waitForTimeout(1000);
   
+  // Move cursor below the code block
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Enter');
+  
   // Click the Table button (icon: "⊞")
   console.log('Clicking Table button...');
   const tableButton = await page.locator('button.cm-md-toolbar-btn[title*="Table"]');
   await tableButton.click();
   await page.waitForTimeout(1000);
+  
+  // Move cursor below the entire table (need to go past all rows)
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Enter');
   
   // Click the Diagram button (icon: "◇")
   console.log('Clicking Diagram button...');
