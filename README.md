@@ -1,6 +1,6 @@
 # codemirror-markdown-hybrid
 
-A CodeMirror 6 extension for hybrid markdown editing - shows rendered preview for unfocused lines and raw markdown for the line being edited.
+A CodeMirror 6 extension for hybrid markdown editing - shows rendered preview for unfocused lines and raw markdown for the line or block being edited.
 
 ## Demo
 
