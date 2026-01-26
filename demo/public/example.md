@@ -1,6 +1,6 @@
 # Hybrid Markdown Editor
 
-A markdown editor that shows the preview of the lines you aren't editing. No need to switch between edit and preview modes so much.
+A [markdown](https://www.markdownguide.org/cheat-sheet/#basic-syntax) editor that shows the preview of the lines you aren't editing. No need to switch between edit and preview modes so much.
 
 Check out the [repo](https://github.com/tiagosimoes/codemirror-markdown-hybrid) to use this in your projects.
 
