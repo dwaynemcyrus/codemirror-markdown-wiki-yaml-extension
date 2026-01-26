@@ -1,5 +1,6 @@
 # codemirror-markdown-hybrid
 
+[![npm version](https://img.shields.io/npm/v/codemirror-markdown-hybrid.svg)](https://www.npmjs.com/package/codemirror-markdown-hybrid)
 [![Tests](https://github.com/tiagosimoes/codemirror-markdown-hybrid/actions/workflows/test.yml/badge.svg)](https://github.com/tiagosimoes/codemirror-markdown-hybrid/actions/workflows/test.yml)
 
 A CodeMirror 6 extension for hybrid markdown editing - shows rendered preview for unfocused lines and raw markdown for the line or block being edited.
