@@ -330,7 +330,7 @@ async function runDemo() {
     try {
       // Convert webm to gif using ffmpeg with good quality settings (600p width for balance)
       // Use -ss to trim the beginning (before typing starts)
-      execSync(`ffmpeg -y -ss ${trimSeconds.toFixed(2)} -i "${videoPath}" -vf "fps=15,scale=600:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" "${gifFile}"`, {
+      execSync(`ffmpeg -y -ss ${trimSeconds.toFixed(2)} -i "${videoPath}" -vf "fps=15,scale=300:-1:flags=lanczos,pad=w=iw+2:h=ih+2:x=1:y=1:color=0xcccccc,split[s0][s1];[s0]palettegen=max_colors=256:stats_mode=diff[p];[s1][p]paletteuse=dither=floyd_steinberg" "${gifFile}"`, {
         stdio: 'inherit'
       });
       console.log(`GIF saved to: ${gifFile}`);
