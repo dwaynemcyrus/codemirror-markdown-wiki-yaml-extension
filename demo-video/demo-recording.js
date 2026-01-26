@@ -62,7 +62,7 @@ async function runDemo() {
   await page.waitForSelector('.cm-editor', { timeout: 5000 });
   console.log('Editor loaded');
 
-  // Add custom cursor with smooth animation
+  // Add custom cursor with smooth animation and zoom controls
   await page.evaluate(() => {
     const style = document.createElement('style');
     style.textContent = `
@@ -76,11 +76,26 @@ async function runDemo() {
         pointer-events: none;
         z-index: 999999;
         transform: translate(-50%, -50%);
-        transition: left 0.6s ease-out, top 0.6s ease-out, opacity 0.2s;
+        transition: left 0.05s linear, top 0.05s linear, opacity 0.2s;
         opacity: 1;
       }
       .pw-cursor.hidden {
         opacity: 0;
+      }
+      body {
+        transform-origin: top left;
+        transition: transform 0.8s ease-in-out;
+      }
+      body.zoomed-in {
+        transform: scale(1.8);
+      }
+      body.zoomed-in.no-transition {
+        transition: none;
+      }
+      /* Prevent toolbar from wrapping when zoomed */
+      .cm-md-toolbar {
+        flex-wrap: nowrap !important;
+        overflow: hidden;
       }
     `;
     document.head.appendChild(style);
@@ -88,30 +103,53 @@ async function runDemo() {
     const cursor = document.createElement('div');
     cursor.className = 'pw-cursor';
     cursor.id = 'pw-cursor';
-    document.body.appendChild(cursor);
+    // Append to documentElement (html) so it's not affected by body's transform
+    document.documentElement.appendChild(cursor);
 
     // Update cursor position on mouse move
+    // Note: cursor uses fixed positioning but is child of body, so body's scale transform applies
     document.addEventListener('mousemove', e => {
       cursor.style.left = e.clientX + 'px';
       cursor.style.top = e.clientY + 'px';
     });
 
-    // Expose functions to show/hide cursor
+    // Expose functions to show/hide cursor and zoom
     window.showCursor = () => cursor.classList.remove('hidden');
     window.hideCursor = () => cursor.classList.add('hidden');
+    window.zoomIn = (animated = true) => {
+      if (!animated) document.body.classList.add('no-transition');
+      document.body.classList.add('zoomed-in');
+      if (!animated) {
+        // Force reflow then remove no-transition
+        document.body.offsetHeight;
+        document.body.classList.remove('no-transition');
+      }
+    };
+    window.zoomOut = () => document.body.classList.remove('zoomed-in');
+    // Start zoomed in without animation
+    window.zoomIn(false);
   });
+
+  // Wait a moment for zoom to be fully applied before starting visible actions
+  await page.waitForTimeout(500);
+
+  // Track recording start time (after initial zoom is applied)
+  const recordingStart = Date.now();
+  const getElapsed = () => (Date.now() - recordingStart) / 1000;
+
+
 
   // Helper to animate cursor to an element before clicking
   async function animateToAndClick(locator) {
     // Show cursor
-    await page.evaluate(() => window.showCursor());
+    await page.evaluate(() => document.getElementById('pw-cursor')?.classList.remove('hidden'));
 
     // Get element position
     const box = await locator.boundingBox();
     if (box) {
-      // Move mouse to element (cursor will animate via CSS transition)
-      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-      await page.waitForTimeout(700); // Wait for animation (matches 0.6s transition)
+      // Move mouse slowly with steps so hover effects align with cursor animation
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2, { steps: 30 });
+      await page.waitForTimeout(200); // Small extra wait for cursor to settle
     }
 
     // Click
@@ -123,7 +161,7 @@ async function runDemo() {
   await page.waitForTimeout(300);
 
   // Hide cursor while typing
-  await page.evaluate(() => window.hideCursor());
+  await page.evaluate(() => document.getElementById('pw-cursor')?.classList.add('hidden'));
 
   // Type the content character by character
   console.log('Typing demo content...');
@@ -133,6 +171,11 @@ async function runDemo() {
 
   console.log('Content typed successfully');
   await page.waitForTimeout(500);
+
+  // Zoom out at ~11s to show full editor
+  console.log(`Zooming out at ${getElapsed().toFixed(1)}s`);
+  await page.evaluate(() => document.body.classList.remove('zoomed-in'));
+  await page.waitForTimeout(1000); // Wait for zoom animation
 
   // Continue to add code block, table, diagram
   await page.keyboard.press('Enter');
@@ -164,12 +207,32 @@ async function runDemo() {
   await animateToAndClick(page.locator('button.cm-md-toolbar-btn[title*="Diagram"]'));
   await page.waitForTimeout(1500);
 
+  await page.waitForTimeout(1000); // Wait for zoom animation
+
   // Go up a bit so the diagram code is visible
   await page.keyboard.press('ArrowUp');
   await page.keyboard.press('ArrowUp');
 
   // Wait a bit to show the diagram code
   await page.waitForTimeout(1500);
+
+  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('ArrowUp');
+
+  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('ArrowUp');
+
+  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('ArrowUp');
+
+  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('ArrowUp');
+
+  // Zoom in at ~20s to show diagram code details
+  console.log(`Zooming in at ${getElapsed().toFixed(1)}s`);
+  await page.evaluate(() => document.body.classList.add('zoomed-in'));
+
+  await page.waitForTimeout(2000);
 
   // Click on the unchecked checkbox (this moves cursor away, rendering the diagram)
   console.log('Clicking unchecked checkbox...');
@@ -215,15 +278,15 @@ async function runDemo() {
 
   if (clickPos) {
     // Show cursor and animate to position before "..."
-    await page.evaluate(() => window.showCursor());
-    await page.mouse.move(clickPos.x, clickPos.y);
-    await page.waitForTimeout(700); // Wait for cursor animation
+    await page.evaluate(() => document.getElementById('pw-cursor')?.classList.remove('hidden'));
+    await page.mouse.move(clickPos.x, clickPos.y, { steps: 30 });
+    await page.waitForTimeout(200); // Small extra wait for cursor to settle
     await page.mouse.click(clickPos.x, clickPos.y);
     await page.waitForTimeout(300);
   }
 
   // Hide cursor while typing
-  await page.evaluate(() => window.hideCursor());
+  await page.evaluate(() => document.getElementById('pw-cursor')?.classList.add('hidden'));
   await page.keyboard.type(', emojis :smile:', { delay: TYPING_DELAY });
   await page.waitForTimeout(500);
 
