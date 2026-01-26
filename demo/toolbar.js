@@ -100,7 +100,7 @@ export const toolbarTheme = EditorView.baseTheme({
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
-    gap: '4px',
+    gap: '2px',
     padding: '8px 12px',
     background: '#f8f9fa',
     borderBottom: '1px solid #dee2e6',
