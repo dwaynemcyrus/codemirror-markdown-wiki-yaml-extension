@@ -1,9 +1,9 @@
-# codemirror-markdown-hybrid
+# codemirror-for-writers
 
-[![npm version](https://img.shields.io/npm/v/codemirror-markdown-hybrid.svg)](https://www.npmjs.com/package/codemirror-markdown-hybrid)
+[![npm version](https://img.shields.io/npm/v/codemirror-for-writers.svg)](https://www.npmjs.com/package/codemirror-for-writers)
 [![Tests](https://github.com/tiagosimoes/codemirror-markdown-hybrid/actions/workflows/test.yml/badge.svg)](https://github.com/tiagosimoes/codemirror-markdown-hybrid/actions/workflows/test.yml)
 
-A CodeMirror 6 extension for hybrid markdown editing - shows rendered preview for unfocused lines and raw markdown for the line or block being edited.
+A CodeMirror 6 extension for hybrid markdown editing - shows rendered preview for unfocused lines and raw markdown for the line or block being edited, with custom task types for writers.
 
 ## Demo
 
@@ -14,7 +14,7 @@ Try it live: [**Live Demo**](https://tiagosimoes.github.io/codemirror-markdown-h
 ## Install
 
 ```bash
-npm install codemirror-markdown-hybrid @codemirror/state @codemirror/view
+npm install codemirror-for-writers @codemirror/state @codemirror/view
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ npm install codemirror-markdown-hybrid @codemirror/state @codemirror/view
 ```javascript
 import { EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import { hybridMarkdown } from 'codemirror-markdown-hybrid';
+import { hybridMarkdown } from 'codemirror-for-writers';
 
 const state = EditorState.create({
   doc: '# Hello World',
@@ -39,6 +39,7 @@ const view = new EditorView({ state, parent: document.body });
 - Light and dark themes with dynamic switching
 - Keyboard shortcuts (Ctrl+B, Ctrl+I, Ctrl+K, etc.)
 - Syntax highlighted code blocks
+- Custom task types with emoji indicators (e.g. `[i]`, `[!]`, `[*]`)
 - Tables, task lists, math (KaTeX), mermaid diagrams, and more
 
 ## API
@@ -53,6 +54,8 @@ Main extension function. Returns an array of CodeMirror extensions.
 | `enablePreview` | `boolean` | `true` | Enable hybrid preview |
 | `enableKeymap` | `boolean` | `true` | Enable markdown shortcuts |
 | `enableCollapse` | `boolean` | `true` | Enable collapsible headings |
+| `enableCustomTasks` | `boolean` | `false` | Enable custom task types in preview |
+| `customTaskTypes` | `string[]` | `['i','!','?','*','>','<']` | Custom task type order |
 
 ### Theme & Mode Functions
 
@@ -66,7 +69,7 @@ Main extension function. Returns an array of CodeMirror extensions.
 The `actions` export provides formatting functions for building custom toolbars:
 
 ```javascript
-import { actions } from 'codemirror-markdown-hybrid';
+import { actions } from 'codemirror-for-writers';
 
 // Available actions: bold, italic, strikethrough, h1, h2, h3,
 // link, image, bulletList, numberedList, taskList, inlineCode,

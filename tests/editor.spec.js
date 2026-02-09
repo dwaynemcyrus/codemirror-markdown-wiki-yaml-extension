@@ -127,6 +127,29 @@ test.describe('Hybrid Markdown Editor', () => {
 
     await expect(page.locator('.cm-markdown-preview .md-list-marker').first()).toBeVisible();
   });
+
+  test('should render custom task icons when unfocused', async ({ page }) => {
+    await page.locator('.cm-content').click();
+    await page.keyboard.type('- [i] Info task');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('next line');
+
+    await expect(page.locator('.cm-markdown-preview .md-task-icon[data-task="i"]')).toBeVisible();
+  });
+
+  test('should cycle custom task types on click', async ({ page }) => {
+    await page.locator('.cm-content').click();
+    await page.keyboard.type('- [x] Cycle task');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('next line');
+
+    const checkbox = page.locator('.cm-markdown-preview input[type="checkbox"]').first();
+    await checkbox.click();
+
+    // Focus the line to reveal raw markdown
+    await page.locator('.cm-markdown-preview').first().click();
+    await expect(page.locator('.cm-content')).toContainText('[i] Cycle task');
+  });
 });
 
 test.describe('Toolbar Actions', () => {

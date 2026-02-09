@@ -33,7 +33,10 @@ const state = EditorState.create({
   doc: initialContent,
   extensions: [
     // The main hybrid markdown extension
-    hybridMarkdown({ theme: 'light' }),
+    hybridMarkdown({
+      theme: 'light',
+      enableCustomTasks: true,
+    }),
 
     // Optional: Add the toolbar with toggle callback
     toolbar({

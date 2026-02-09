@@ -39,7 +39,12 @@ greet('World');
 
 - [x] Completed task
 - [ ] Incomplete task
-- [ ] Another task
+- [i] Information task
+- [!] Urgent task
+- [?] Question task
+- [*] Important task
+- [>] Forwarded task
+- [<] Scheduled task
 
 ### Blockquote
 
