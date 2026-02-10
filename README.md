@@ -41,6 +41,11 @@ const view = new EditorView({ state, parent: document.body });
 - Syntax highlighted code blocks
 - Custom task types with emoji indicators (e.g. `[i]`, `[!]`, `[*]`)
 - Tables, task lists, math (KaTeX), mermaid diagrams, and more
+- Wiki links in preview (`[[title]]`, `[[title|alias]]`, `[[title#section]]`, `[[title#section|alias]]`)
+
+### Wiki Links (App Layer)
+
+This package only handles wiki-link parsing, rendering, and styling inside the editor. Autocomplete, link resolution, and note indexing are app-specific and should live outside the extension. The demo includes a small companion autocomplete plugin in `demo/wiki-link-autocomplete.js` to show the intended separation.
 
 ## API
 
@@ -56,6 +61,9 @@ Main extension function. Returns an array of CodeMirror extensions.
 | `enableCollapse` | `boolean` | `true` | Enable collapsible headings |
 | `enableCustomTasks` | `boolean` | `false` | Enable custom task types in preview |
 | `customTaskTypes` | `string[]` | `['i','!','?','*','>','<']` | Custom task type order |
+| `enableWikiLinks` | `boolean` | `false` | Enable wiki-link parsing/highlighting in hybrid preview |
+| `renderWikiLinks` | `boolean` | `true` | Render wiki links in preview when enabled |
+| `onWikiLinkClick` | `(link) => void` | `undefined` | Optional handler for preview wiki-link clicks (only active when provided) |
 
 ### Theme & Mode Functions
 

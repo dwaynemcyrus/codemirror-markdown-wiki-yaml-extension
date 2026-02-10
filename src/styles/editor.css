@@ -19,6 +19,12 @@
   padding: 2px 4px;
 }
 
+.cm-wikilink {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  color: #228be6;
+}
+
 /* Code block lines - preview mode (gray background) */
 .cm-code-block-line {
   background-color: #f6f8fa !important;

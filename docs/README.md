@@ -84,9 +84,9 @@ const view = new EditorView({
       enableExtendedMarkdown: true,
       enableCustomTasks: true,
       customTaskTypes: ['!', '>', '<', '?', 'i', '*'],
-      onWikiLinkClick: (target) => {
+      onWikiLinkClick: (link) => {
         // Navigate to wiki page
-        console.log('Navigate to:', target);
+        console.log('Navigate to:', link.title, link.section);
       },
       onFrontmatterChange: (data) => {
         // Sync frontmatter data
@@ -108,12 +108,13 @@ interface HybridMarkdownOptions {
   enablePreview?: boolean;                // Default: true
   enableKeymap?: boolean;                 // Default: true
   enableCollapse?: boolean;               // Default: true
-  enableWikiLinks?: boolean;              // Default: true
+  enableWikiLinks?: boolean;              // Default: false
+  renderWikiLinks?: boolean;              // Default: true
   enableYamlFrontmatter?: boolean;        // Default: true
   enableExtendedMarkdown?: boolean;       // Default: true
   enableCustomTasks?: boolean;            // Default: true
   customTaskTypes?: string[];             // Default: ['!', '>', '<', '?', 'i', '*']
-  onWikiLinkClick?: (linkText: string) => void;
+  onWikiLinkClick?: (link: { raw: string; title: string; section: string; alias: string; display: string }) => void;
   onFrontmatterChange?: (frontmatter: Record<string, any>) => void;
 }
 ```
@@ -187,8 +188,8 @@ actions.insertFrontmatter(view);
 ```typescript
 hybridMarkdown({
   enableWikiLinks: true,
-  onWikiLinkClick: (target) => {
-    router.push(`/notes/${target}`);
+  onWikiLinkClick: (link) => {
+    router.push(`/notes/${link.title}`);
   },
 })
 ```

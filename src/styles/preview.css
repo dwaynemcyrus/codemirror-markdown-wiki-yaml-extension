@@ -74,6 +74,13 @@
   text-decoration: underline;
 }
 
+.cm-markdown-preview .md-wikilink {
+  color: #228be6;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
 /* Images */
 .cm-markdown-preview img {
   max-width: 100%;

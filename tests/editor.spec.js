@@ -199,6 +199,78 @@ test.describe('Hybrid Markdown Editor', () => {
     await expect(page.locator('.cm-markdown-preview')).toContainText('⛺');
   });
 
+  test('should render wiki links when unfocused', async ({ page }) => {
+    await page.locator('.cm-content').click();
+    await page.keyboard.type('See [[Project Plan]]');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('next line');
+
+    await expect(page.locator('.cm-markdown-preview .md-wikilink')).toHaveText('Project Plan');
+  });
+
+  test('should render section-only wiki links when no alias is provided', async ({ page }) => {
+    await page.locator('.cm-content').click();
+    await page.keyboard.type('See [[Research Notes#Open Questions]]');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('next line');
+
+    await expect(page.locator('.cm-markdown-preview .md-wikilink')).toHaveText('Open Questions');
+  });
+
+  test('should not parse wiki links inside inline code', async ({ page }) => {
+    await page.locator('.cm-content').click();
+    await page.keyboard.type('`[[NotALink]]`');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('next line');
+
+    await expect(page.locator('.cm-markdown-preview code')).toContainText('[[NotALink]]');
+    await expect(page.locator('.cm-markdown-preview .md-wikilink')).toHaveCount(0);
+  });
+
+  test('should handle wiki link clicks inside table preview', async ({ page }) => {
+    await page.locator('.cm-content').click();
+    await page.keyboard.type('| Link |');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('|---|');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('| [[Project Plan]] |');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('next line');
+
+    await page.locator('.cm-table-preview .md-wikilink').click();
+
+    const lastTitle = await page.evaluate(() => window.__wikiLinkTelemetry?.last?.title || '');
+    await expect(lastTitle).toBe('Project Plan');
+  });
+
+  test('should handle wiki link clicks inside definition list preview', async ({ page }) => {
+    await page.locator('.cm-content').click();
+    await page.keyboard.type('Term One');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type(': See [[Meeting Notes]]');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('next line');
+
+    await page.locator('.cm-definition-list-preview .md-wikilink').click();
+
+    const lastTitle = await page.evaluate(() => window.__wikiLinkTelemetry?.last?.title || '');
+    await expect(lastTitle).toBe('Meeting Notes');
+  });
+
+  test('should handle wiki link clicks inside footnote preview', async ({ page }) => {
+    await page.locator('.cm-content').click();
+    await page.keyboard.type('Footnote ref[^note]');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('[^note]: See [[Project Plan]]');
+    await page.keyboard.press('Enter');
+    await page.keyboard.type('next line');
+
+    await page.locator('.cm-footnote-preview .md-wikilink').click();
+
+    const lastTitle = await page.evaluate(() => window.__wikiLinkTelemetry?.last?.title || '');
+    await expect(lastTitle).toBe('Project Plan');
+  });
+
   test('should render custom task icons when unfocused', async ({ page }) => {
     await page.locator('.cm-content').click();
     await page.keyboard.type('- [i] Info task');

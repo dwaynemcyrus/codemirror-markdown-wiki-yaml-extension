@@ -79,6 +79,7 @@ Deferred Toolbar/Keybindings
 - Heading IDs (`### Heading [#id]`)
 - Definition Lists (term + `: definition`)
 - Emoji shortcodes (full coverage)
+- Wiki links (`[[title]]`, `[[title|alias]]`, `[[title#section]]`, `[[title#section|alias]]`)
 
 ---
 
@@ -104,6 +105,47 @@ Expected Files
 Risks
 - Inline parsing differences may slightly affect preview alignment.
 - Custom inline rules could conflict with markdown-it defaults if not ordered carefully.
+
+Verification
+- `npm run test`
+- `npm run build:lib`
+- `npm run build`
+
+---
+
+## Feature: Wiki Links (Parsing + Preview + Demo Autocomplete)
+
+Plan
+1. Add a strict wiki-link parser and markdown-it inline rule for `[[title]]`, `[[title|alias]]`, `[[title#section]]`, and `[[title#section|alias]]` with no nesting and no leading/trailing spaces.
+2. Wire preview rendering to output styled wiki-link spans and include data attributes for app-level click handling.
+3. Add hybrid-mode decorations to highlight wiki links in raw (focused) lines while skipping code blocks and inline code.
+4. Expose `enableWikiLinks`, `renderWikiLinks`, and `onWikiLinkClick` options in `hybridMarkdown`/`hybridPreview`, defaulting to off.
+5. Add a demo-only autocomplete plugin that uses a note index and insertion formatting, and enable wiki links in the demo.
+6. Update README/PLANS and demo content to document/illustrate wiki links and the app-layer plugin split.
+7. Add Playwright coverage for wiki-link rendering and inline-code exclusion.
+8. Run verification: `npm run test`, `npm run build:lib`, `npm run build`.
+
+Expected Files
+- PLANS.md
+- README.md
+- lib/utils/markdown.js
+- lib/extensions/hybrid-preview.js
+- lib/theme/base.js
+- lib/theme/light.js
+- lib/theme/dark.js
+- src/utils/markdown.js
+- src/styles/preview.css
+- src/styles/editor.css
+- demo/main.js
+- demo/wiki-link-autocomplete.js
+- demo/public/example.md
+- tests/editor.spec.js
+- package.json
+- package-lock.json
+
+Risks
+- Regex/scanner-based parsing could mis-handle edge cases; strict rules mitigate ambiguity.
+- Inline rendering changes may affect perceived alignment for complex lines.
 
 Verification
 - `npm run test`

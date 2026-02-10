@@ -61,6 +61,7 @@
     "mermaid": "^11.12.2"
   },
   "devDependencies": {
+    "@codemirror/autocomplete": "^6.20.0",
     "@codemirror/commands": "^6.6.0",
     "@codemirror/lang-markdown": "^6.3.0",
     "@codemirror/state": "^6.4.0",

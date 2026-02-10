@@ -6,6 +6,11 @@ import {
   toggleHybridMode,
 } from '../lib/index.js';
 import { toolbar } from './toolbar.js';
+import {
+  createNoteIndex,
+  resolveWikiLink,
+  wikiLinkAutocomplete,
+} from './wiki-link-autocomplete.js';
 import 'katex/dist/katex.min.css';
 import './styles.css';
 import exampleContent from './public/example.md?raw';
@@ -28,6 +33,20 @@ container.appendChild(wrapper);
 const shouldLoadExample = window.location.hash !== '#empty';
 const initialContent = shouldLoadExample ? exampleContent : '';
 
+const noteIndex = createNoteIndex([
+  { title: 'Project Plan', aliases: ['Plan'] },
+  { title: 'Meeting Notes' },
+  { title: 'Research Notes' },
+  { title: 'Daily Log' },
+  { title: 'Release Checklist' },
+]);
+
+const wikiLinkTelemetry = {
+  last: null,
+  clicks: [],
+};
+window.__wikiLinkTelemetry = wikiLinkTelemetry;
+
 // Initialize editor with the extension
 const state = EditorState.create({
   doc: initialContent,
@@ -36,7 +55,18 @@ const state = EditorState.create({
     hybridMarkdown({
       theme: 'light',
       enableCustomTasks: true,
+      enableWikiLinks: true,
+      renderWikiLinks: true,
+      onWikiLinkClick: (link) => {
+        const resolved = resolveWikiLink(noteIndex, link);
+        wikiLinkTelemetry.last = link;
+        wikiLinkTelemetry.clicks.push(link);
+        console.info('Wiki link clicked', { link, resolved });
+      },
     }),
+
+    // App-layer wiki link autocomplete (demo only)
+    wikiLinkAutocomplete({ noteIndex }),
 
     // Optional: Add the toolbar with toggle callback
     toolbar({

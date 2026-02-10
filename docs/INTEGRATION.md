@@ -27,7 +27,7 @@ import { hybridMarkdown } from '@cyrus/codemirror-markdown-hybrid';
 interface MarkdownEditorProps {
   initialValue?: string;
   onChange?: (value: string) => void;
-  onWikiLinkClick?: (target: string) => void;
+  onWikiLinkClick?: (link: { raw: string; title: string; section: string; alias: string; display: string }) => void;
   theme?: 'light' | 'dark';
 }
 
@@ -131,9 +131,9 @@ export default function EditorPage() {
   const router = useRouter();
   const [content, setContent] = useState('');
 
-  const handleWikiLinkClick = (target: string) => {
+  const handleWikiLinkClick = (link: { title: string }) => {
     // Navigate to another note
-    router.push(`/notes/${encodeURIComponent(target)}`);
+    router.push(`/notes/${encodeURIComponent(link.title)}`);
   };
 
   return (
@@ -422,7 +422,7 @@ test('renders wiki link on click', async () => {
   await userEvent.type(editor, '[[Test Link]]');
   
   // Should call handler
-  expect(handleClick).toHaveBeenCalledWith('Test Link');
+  expect(handleClick).toHaveBeenCalledWith(expect.objectContaining({ title: 'Test Link' }));
 });
 ```
 

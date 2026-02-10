@@ -80,6 +80,13 @@ Check out [codemirror-markdown-hybrid](https://github.com/tiagosimoes/codemirror
 
 ![Sample Image](sample-image.jpg)
 
+### Wiki Links
+
+See [[Project Plan]] for the roadmap.
+Alias example: [[Meeting Notes|Latest sync]]
+Section-only display: [[Research Notes#Open Questions]]
+Section with alias: [[Release Checklist#Review|Preflight]]
+
 ### Tables
 
 | Feature | Status | Notes |
