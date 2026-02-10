@@ -31,6 +31,14 @@
   border-color: #adb5bd;
 }
 
+.md-toolbar-btn:disabled {
+  background: #f1f3f5;
+  border-color: #dee2e6;
+  color: #adb5bd;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 .md-toolbar-btn:active {
   background: #dee2e6;
   transform: translateY(1px);
@@ -85,6 +93,12 @@
 .dark-mode .md-toolbar-btn:hover {
   background: #4a4a4a;
   border-color: #666;
+}
+
+.dark-mode .md-toolbar-btn:disabled {
+  background: #2f2f2f;
+  border-color: #444;
+  color: #777;
 }
 
 .dark-mode .md-toolbar-btn:active {

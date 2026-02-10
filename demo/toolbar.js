@@ -1,10 +1,15 @@
 import { EditorView, showPanel } from '@codemirror/view';
+import { StateEffect } from '@codemirror/state';
+import { undoDepth, redoDepth } from '@codemirror/commands';
 import { actions } from '../lib/index.js';
 
 /**
  * Toolbar button configuration
  */
 const toolbarButtons = [
+  { icon: '↶', title: 'Undo (Ctrl+Z)', action: 'undo' },
+  { icon: '↷', title: 'Redo (Ctrl+Shift+Z)', action: 'redo' },
+  { type: 'separator' },
   { icon: 'B', title: 'Bold (Ctrl+B)', action: 'bold', style: 'font-weight: bold' },
   { icon: 'I', title: 'Italic (Ctrl+I)', action: 'italic', style: 'font-style: italic' },
   { icon: 'S', title: 'Strikethrough', action: 'strikethrough', style: 'text-decoration: line-through' },
@@ -40,6 +45,7 @@ const toolbarButtons = [
 function createToolbarDOM(view, callbacks = {}) {
   const toolbar = document.createElement('div');
   toolbar.className = 'cm-md-toolbar';
+  const buttonsByAction = new Map();
 
   // Add formatting buttons
   toolbarButtons.forEach(({ icon, title, action, style, type }) => {
@@ -58,6 +64,10 @@ function createToolbarDOM(view, callbacks = {}) {
       btn.style.cssText = style;
     }
 
+    if (action) {
+      buttonsByAction.set(action, btn);
+    }
+
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       if (actions[action]) {
@@ -68,6 +78,34 @@ function createToolbarDOM(view, callbacks = {}) {
 
     toolbar.appendChild(btn);
   });
+
+  const updateHistoryButtons = () => {
+    const undoBtn = buttonsByAction.get('undo');
+    if (undoBtn) {
+      const enabled = undoDepth(view.state) > 0;
+      undoBtn.disabled = !enabled;
+      undoBtn.classList.toggle('cm-md-toolbar-btn-disabled', !enabled);
+      undoBtn.setAttribute('aria-disabled', String(!enabled));
+    }
+
+    const redoBtn = buttonsByAction.get('redo');
+    if (redoBtn) {
+      const enabled = redoDepth(view.state) > 0;
+      redoBtn.disabled = !enabled;
+      redoBtn.classList.toggle('cm-md-toolbar-btn-disabled', !enabled);
+      redoBtn.setAttribute('aria-disabled', String(!enabled));
+    }
+  };
+
+  view.dispatch({
+    effects: StateEffect.appendConfig.of(
+      EditorView.updateListener.of(() => {
+        updateHistoryButtons();
+      })
+    ),
+  });
+
+  updateHistoryButtons();
 
   // Add spacer to push toggle button to the right
   const spacer = document.createElement('div');
@@ -126,6 +164,14 @@ export const toolbarTheme = EditorView.baseTheme({
     background: '#e9ecef',
     borderColor: '#adb5bd',
   },
+  '.cm-md-toolbar-btn:disabled': {
+    background: '#f1f3f5',
+    borderColor: '#dee2e6',
+    color: '#adb5bd',
+    cursor: 'not-allowed',
+    boxShadow: 'none',
+    transform: 'none',
+  },
   '.cm-md-toolbar-btn:active': {
     background: '#dee2e6',
     transform: 'translateY(1px)',
@@ -165,6 +211,11 @@ export const toolbarTheme = EditorView.baseTheme({
   '&dark .cm-md-toolbar-btn:hover': {
     background: '#4a4a4a',
     borderColor: '#666',
+  },
+  '&dark .cm-md-toolbar-btn:disabled': {
+    background: '#2f2f2f',
+    borderColor: '#444',
+    color: '#777',
   },
   '&dark .cm-md-toolbar-btn:active': {
     background: '#555',

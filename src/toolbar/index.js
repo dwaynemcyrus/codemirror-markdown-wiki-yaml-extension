@@ -1,7 +1,13 @@
+import { EditorView } from '@codemirror/view';
+import { StateEffect } from '@codemirror/state';
+import { undoDepth, redoDepth } from '@codemirror/commands';
 import { actions } from './actions.js';
 import { toggleTheme, toggleHybridMode } from '../editor/index.js';
 
 const toolbarButtons = [
+  { icon: '↶', title: 'Undo (Ctrl+Z)', action: 'undo' },
+  { icon: '↷', title: 'Redo (Ctrl+Shift+Z)', action: 'redo' },
+  { type: 'separator' },
   { icon: 'B', title: 'Bold (Ctrl+B)', action: 'bold', style: 'font-weight: bold' },
   { icon: 'I', title: 'Italic (Ctrl+I)', action: 'italic', style: 'font-style: italic' },
   { icon: 'S', title: 'Strikethrough', action: 'strikethrough', style: 'text-decoration: line-through' },
@@ -33,6 +39,7 @@ const toolbarButtons = [
 export function createToolbar(editorView) {
   const toolbar = document.createElement('div');
   toolbar.className = 'md-toolbar';
+  const buttonsByAction = new Map();
 
   toolbarButtons.forEach(({ icon, title, action, style, type }) => {
     if (type === 'separator') {
@@ -48,6 +55,10 @@ export function createToolbar(editorView) {
     btn.title = title;
     if (style) {
       btn.style.cssText = style;
+    }
+
+    if (action) {
+      buttonsByAction.set(action, btn);
     }
 
     // Special handling for theme toggle
@@ -84,6 +95,34 @@ export function createToolbar(editorView) {
 
     toolbar.appendChild(btn);
   });
+
+  const updateHistoryButtons = () => {
+    const undoBtn = buttonsByAction.get('undo');
+    if (undoBtn) {
+      const enabled = undoDepth(editorView.state) > 0;
+      undoBtn.disabled = !enabled;
+      undoBtn.classList.toggle('md-toolbar-btn-disabled', !enabled);
+      undoBtn.setAttribute('aria-disabled', String(!enabled));
+    }
+
+    const redoBtn = buttonsByAction.get('redo');
+    if (redoBtn) {
+      const enabled = redoDepth(editorView.state) > 0;
+      redoBtn.disabled = !enabled;
+      redoBtn.classList.toggle('md-toolbar-btn-disabled', !enabled);
+      redoBtn.setAttribute('aria-disabled', String(!enabled));
+    }
+  };
+
+  editorView.dispatch({
+    effects: StateEffect.appendConfig.of(
+      EditorView.updateListener.of(() => {
+        updateHistoryButtons();
+      })
+    ),
+  });
+
+  updateHistoryButtons();
 
   return toolbar;
 }

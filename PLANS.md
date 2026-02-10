@@ -151,3 +151,32 @@ Verification
 - `npm run test`
 - `npm run build:lib`
 - `npm run build`
+
+---
+
+## Feature: Undo/Redo Toolbar Buttons
+
+Plan
+1. Add undo/redo actions to toolbar action modules and wire them into both demo and app toolbars.
+2. Insert undo/redo buttons at the far left of each toolbar with `↶`/`↷` icons.
+3. Disable undo/redo buttons when history depth is zero, updating state on editor transactions.
+4. Add styles for disabled toolbar buttons in both demo and app CSS.
+5. Add Playwright coverage for undo/redo toolbar behavior.
+6. Run verification: `npm run test`, `npm run build:lib`, `npm run build`.
+
+Expected Files
+- PLANS.md
+- lib/extensions/actions.js
+- demo/toolbar.js
+- src/toolbar/actions.js
+- src/toolbar/index.js
+- src/toolbar/toolbar.css
+- tests/editor.spec.js
+
+Risks
+- Toolbar state updates must stay in sync with editor history changes.
+
+Verification
+- `npm run test`
+- `npm run build:lib`
+- `npm run build`

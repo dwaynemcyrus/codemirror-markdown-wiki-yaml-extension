@@ -354,6 +354,24 @@ test.describe('Toolbar Actions', () => {
     await page.locator('.cm-md-toolbar-btn[title="Bullet List"]').click();
     await expect(page.locator('.cm-content')).toContainText('- ');
   });
+
+  test('should undo and redo with toolbar buttons', async ({ page }) => {
+    const undoBtn = page.locator('.cm-md-toolbar-btn[title="Undo (Ctrl+Z)"]');
+    const redoBtn = page.locator('.cm-md-toolbar-btn[title="Redo (Ctrl+Shift+Z)"]');
+
+    await expect(undoBtn).toBeDisabled();
+    await expect(redoBtn).toBeDisabled();
+
+    await page.keyboard.type('Hello');
+    await expect(undoBtn).toBeEnabled();
+
+    await undoBtn.click();
+    await expect(page.locator('.cm-content')).not.toContainText('Hello');
+    await expect(redoBtn).toBeEnabled();
+
+    await redoBtn.click();
+    await expect(page.locator('.cm-content')).toContainText('Hello');
+  });
 });
 
 test.describe('Theme and Mode', () => {
