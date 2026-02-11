@@ -1,3 +1,5 @@
+import { StateEffect } from '@codemirror/state';
+import { EditorView } from '@codemirror/view';
 import { createEditor, isHybrid } from './editor/index.js';
 import { createToolbar } from './toolbar/index.js';
 import './styles/main.css';
@@ -28,7 +30,18 @@ const editor = createEditor(editorContainer, initialContent);
 
 // Create and attach toolbar
 const toolbar = createToolbar(editor);
-toolbarContainer.appendChild(toolbar);
+const toolbarDom = toolbar?.dom ?? toolbar;
+toolbarContainer.appendChild(toolbarDom);
+
+if (toolbar?.update) {
+  editor.dispatch({
+    effects: StateEffect.appendConfig.of(
+      EditorView.updateListener.of((update) => {
+        toolbar.update(update);
+      })
+    ),
+  });
+}
 
 // Blur editor when clicking outside (in hybrid mode)
 // This removes the caret and shows all lines in preview mode

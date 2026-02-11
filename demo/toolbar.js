@@ -1,5 +1,4 @@
 import { EditorView, showPanel } from '@codemirror/view';
-import { StateEffect } from '@codemirror/state';
 import { undoDepth, redoDepth } from '@codemirror/commands';
 import { actions } from '../lib/index.js';
 
@@ -79,10 +78,10 @@ function createToolbarDOM(view, callbacks = {}) {
     toolbar.appendChild(btn);
   });
 
-  const updateHistoryButtons = () => {
+  const updateHistoryButtons = (state) => {
     const undoBtn = buttonsByAction.get('undo');
     if (undoBtn) {
-      const enabled = undoDepth(view.state) > 0;
+      const enabled = undoDepth(state) > 0;
       undoBtn.disabled = !enabled;
       undoBtn.classList.toggle('cm-md-toolbar-btn-disabled', !enabled);
       undoBtn.setAttribute('aria-disabled', String(!enabled));
@@ -90,22 +89,14 @@ function createToolbarDOM(view, callbacks = {}) {
 
     const redoBtn = buttonsByAction.get('redo');
     if (redoBtn) {
-      const enabled = redoDepth(view.state) > 0;
+      const enabled = redoDepth(state) > 0;
       redoBtn.disabled = !enabled;
       redoBtn.classList.toggle('cm-md-toolbar-btn-disabled', !enabled);
       redoBtn.setAttribute('aria-disabled', String(!enabled));
     }
   };
 
-  view.dispatch({
-    effects: StateEffect.appendConfig.of(
-      EditorView.updateListener.of(() => {
-        updateHistoryButtons();
-      })
-    ),
-  });
-
-  updateHistoryButtons();
+  updateHistoryButtons(view.state);
 
   // Add spacer to push toggle button to the right
   const spacer = document.createElement('div');
@@ -127,7 +118,7 @@ function createToolbarDOM(view, callbacks = {}) {
     toolbar.appendChild(modeBtn);
   }
 
-  return toolbar;
+  return { dom: toolbar, updateHistoryButtons };
 }
 
 /**
@@ -244,8 +235,14 @@ export function toolbar(options = {}) {
   const { onToggleMode } = options;
 
   const panelPlugin = showPanel.of((view) => {
-    const dom = createToolbarDOM(view, { onToggleMode });
-    return { dom, top: true };
+    const { dom, updateHistoryButtons } = createToolbarDOM(view, { onToggleMode });
+    return {
+      dom,
+      top: true,
+      update(update) {
+        updateHistoryButtons(update.state);
+      },
+    };
   });
 
   return [panelPlugin, toolbarTheme];

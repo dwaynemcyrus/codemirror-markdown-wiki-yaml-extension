@@ -1,5 +1,4 @@
 import { EditorView } from '@codemirror/view';
-import { StateEffect } from '@codemirror/state';
 import { undoDepth, redoDepth } from '@codemirror/commands';
 import { actions } from './actions.js';
 import { toggleTheme, toggleHybridMode } from '../editor/index.js';
@@ -96,10 +95,10 @@ export function createToolbar(editorView) {
     toolbar.appendChild(btn);
   });
 
-  const updateHistoryButtons = () => {
+  const updateHistoryButtons = (state) => {
     const undoBtn = buttonsByAction.get('undo');
     if (undoBtn) {
-      const enabled = undoDepth(editorView.state) > 0;
+      const enabled = undoDepth(state) > 0;
       undoBtn.disabled = !enabled;
       undoBtn.classList.toggle('md-toolbar-btn-disabled', !enabled);
       undoBtn.setAttribute('aria-disabled', String(!enabled));
@@ -107,22 +106,19 @@ export function createToolbar(editorView) {
 
     const redoBtn = buttonsByAction.get('redo');
     if (redoBtn) {
-      const enabled = redoDepth(editorView.state) > 0;
+      const enabled = redoDepth(state) > 0;
       redoBtn.disabled = !enabled;
       redoBtn.classList.toggle('md-toolbar-btn-disabled', !enabled);
       redoBtn.setAttribute('aria-disabled', String(!enabled));
     }
   };
 
-  editorView.dispatch({
-    effects: StateEffect.appendConfig.of(
-      EditorView.updateListener.of(() => {
-        updateHistoryButtons();
-      })
-    ),
-  });
+  updateHistoryButtons(editorView.state);
 
-  updateHistoryButtons();
-
-  return toolbar;
+  return {
+    dom: toolbar,
+    update(update) {
+      updateHistoryButtons(update.state);
+    },
+  };
 }
