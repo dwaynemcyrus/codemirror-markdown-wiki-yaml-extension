@@ -2,6 +2,7 @@ import { EditorState, Compartment } from '@codemirror/state';
 import { EditorView, keymap, Decoration, ViewPlugin } from '@codemirror/view';
 import { markdown } from '@codemirror/lang-markdown';
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
+import { search, searchKeymap } from '@codemirror/search';
 import { hybridPreview } from './extensions/hybrid-preview.js';
 import { markdownKeymap } from './extensions/keymaps.js';
 import { lightTheme, darkTheme } from './theme.js';
@@ -72,7 +73,11 @@ export function createEditor(parent, initialContent = '') {
       keymap.of([
         ...defaultKeymap,
         ...historyKeymap,
+        ...searchKeymap,
       ]),
+
+      // Search panel + keybindings
+      search(),
 
       // Markdown language support (for raw lines)
       markdown(),

@@ -372,6 +372,18 @@ test.describe('Toolbar Actions', () => {
     await redoBtn.click();
     await expect(page.locator('.cm-content')).toContainText('Hello');
   });
+
+  test('should open search and replace panels from toolbar', async ({ page }) => {
+    const searchBtn = page.locator('.cm-md-toolbar-btn[title="Search (Ctrl+F)"]');
+    const replaceBtn = page.locator('.cm-md-toolbar-btn[title="Replace (Ctrl+Shift+F)"]');
+
+    await searchBtn.click();
+    await expect(page.locator('.cm-search')).toBeVisible();
+
+    await replaceBtn.click();
+    await expect(page.locator('.cm-search')).toBeVisible();
+    await expect(page.locator('.cm-search input[name="replace"]')).toBeVisible();
+  });
 });
 
 test.describe('Theme and Mode', () => {

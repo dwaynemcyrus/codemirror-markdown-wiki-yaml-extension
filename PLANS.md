@@ -180,3 +180,35 @@ Verification
 - `npm run test`
 - `npm run build:lib`
 - `npm run build`
+
+---
+
+## Feature: Search + Replace Panels
+
+Plan
+1. Add `@codemirror/search` dependency and enable `search()` + `searchKeymap` in both library and app editor stacks.
+2. Add `search` and `replace` actions that open CodeMirror’s panels.
+3. Add Search/Replace buttons to both toolbars near undo/redo.
+4. Update README actions list.
+5. Add Playwright coverage for opening the search and replace panels.
+6. Run verification: `npm run test`, `npm run build:lib`, `npm run build`.
+
+Expected Files
+- package.json
+- package-lock.json
+- lib/index.js
+- src/editor/index.js
+- lib/extensions/actions.js
+- src/toolbar/actions.js
+- demo/toolbar.js
+- src/toolbar/index.js
+- README.md
+- tests/editor.spec.js
+
+Risks
+- Search panel styling may not match existing theme; follow-up styling may be needed.
+
+Verification
+- `npm run test`
+- `npm run build:lib`
+- `npm run build`

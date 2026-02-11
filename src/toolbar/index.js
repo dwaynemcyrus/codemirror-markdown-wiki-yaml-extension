@@ -6,6 +6,8 @@ import { toggleTheme, toggleHybridMode } from '../editor/index.js';
 const toolbarButtons = [
   { icon: '↶', title: 'Undo (Ctrl+Z)', action: 'undo' },
   { icon: '↷', title: 'Redo (Ctrl+Shift+Z)', action: 'redo' },
+  { icon: '🔍', title: 'Search (Ctrl+F)', action: 'search' },
+  { icon: '🔁', title: 'Replace (Ctrl+Shift+F)', action: 'replace' },
   { type: 'separator' },
   { icon: 'B', title: 'Bold (Ctrl+B)', action: 'bold', style: 'font-weight: bold' },
   { icon: 'I', title: 'Italic (Ctrl+I)', action: 'italic', style: 'font-style: italic' },
