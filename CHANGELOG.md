@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.6.0
+
+### Added
+- Undo/redo, search/replace, and multi-selection toolbar actions.
+- Line numbers toggle and scroll-past-end toggle in the toolbar.
+- Read-only mode with task toggle exception.
+
+### Changed
+- Toolbar update flow to avoid dispatching during active editor updates.
+- Demo toolbar and editor wiring for new UX toggles.
+
+### Fixed
+- Toolbar initialization crash caused by dispatching inside update cycles.
+
 ## v1.5.0
 
 ### Added
