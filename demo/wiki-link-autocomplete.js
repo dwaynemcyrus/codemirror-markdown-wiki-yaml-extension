@@ -1,5 +1,3 @@
-import { autocompletion } from '@codemirror/autocomplete';
-
 export function createNoteIndex(notes = []) {
   const entries = notes.map((note) => ({
     title: note.title,
@@ -60,11 +58,10 @@ export function resolveWikiLink(noteIndex, link) {
 }
 
 export function wikiLinkAutocomplete({ noteIndex, formatLink } = {}) {
-  if (!noteIndex) return [];
-
   const format = typeof formatLink === 'function' ? formatLink : defaultFormatLink;
 
-  const source = (context) => {
+  return (context) => {
+    if (!noteIndex) return null;
     const match = context.matchBefore(/\[\[[^\[\]\n]*$/);
     if (!match) return null;
 
@@ -84,8 +81,4 @@ export function wikiLinkAutocomplete({ noteIndex, formatLink } = {}) {
       validFor: /^[^\[\]\n]*$/,
     };
   };
-
-  return autocompletion({
-    override: [source],
-  });
 }

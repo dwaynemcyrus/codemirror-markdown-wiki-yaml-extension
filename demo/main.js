@@ -10,6 +10,7 @@ import {
   toggleWordCount,
   tagAutocomplete,
 } from '../lib/index.js';
+import { autocompletion } from '@codemirror/autocomplete';
 import { toolbar } from './toolbar.js';
 import {
   createNoteIndex,
@@ -82,15 +83,17 @@ const state = EditorState.create({
       },
     }),
 
-    // App-layer wiki link autocomplete (demo only)
-    wikiLinkAutocomplete({ noteIndex }),
-
-    // Tag autocomplete
-    tagAutocomplete({
-      tags: [
-        'markdown', 'editor', 'codemirror', 'codemirror/extension', 'codemirror/view',
-        'javascript', 'typescript', 'project', 'project/active', 'project/archived',
-        'todo', 'done', 'idea', 'bug', 'feature', 'documentation',
+    // Autocomplete: wiki links + tags combined into one autocompletion() call
+    autocompletion({
+      override: [
+        wikiLinkAutocomplete({ noteIndex }),
+        tagAutocomplete({
+          tags: [
+            'markdown', 'editor', 'codemirror', 'codemirror/extension', 'codemirror/view',
+            'javascript', 'typescript', 'project', 'project/active', 'project/archived',
+            'todo', 'done', 'idea', 'bug', 'feature', 'documentation',
+          ],
+        }),
       ],
     }),
 
