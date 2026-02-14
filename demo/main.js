@@ -7,6 +7,7 @@ import {
   toggleReadOnly,
   toggleTypewriter,
   toggleFocusMode,
+  toggleWordCount,
 } from '../lib/index.js';
 import { toolbar } from './toolbar.js';
 import {
@@ -106,6 +107,7 @@ const state = EditorState.create({
       onToggleReadOnly: (view) => toggleReadOnly(view),
       onToggleTypewriter: (view) => toggleTypewriter(view),
       onToggleFocusMode: (view) => toggleFocusMode(view),
+      onToggleWordCount: (view) => toggleWordCount(view),
     }),
   ],
 });

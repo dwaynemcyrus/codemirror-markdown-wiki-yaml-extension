@@ -49,6 +49,7 @@ const toolbarButtons = [
  * @param {Function} callbacks.onToggleReadOnly - Called when read-only toggle is clicked
  * @param {Function} callbacks.onToggleTypewriter - Called when typewriter mode toggle is clicked
  * @param {Function} callbacks.onToggleFocusMode - Called when focus mode toggle is clicked
+ * @param {Function} callbacks.onToggleWordCount - Called when word count toggle is clicked
  */
 function createToolbarDOM(view, callbacks = {}) {
   const toolbar = document.createElement('div');
@@ -182,6 +183,25 @@ function createToolbarDOM(view, callbacks = {}) {
       view.focus();
     });
     toolbar.appendChild(typewriterBtn);
+  }
+
+  // Add word count toggle button
+  if (callbacks.onToggleWordCount) {
+    const wordCountBtn = document.createElement('button');
+    wordCountBtn.className = 'cm-md-toolbar-btn';
+    wordCountBtn.textContent = 'Wc';
+    wordCountBtn.title = 'Show Word Count';
+    wordCountBtn.style.cssText = 'font-size: 11px; letter-spacing: -0.5px';
+    wordCountBtn.setAttribute('aria-pressed', 'false');
+    wordCountBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const enabled = callbacks.onToggleWordCount(view);
+      wordCountBtn.classList.toggle('cm-md-toolbar-btn-pressed', enabled);
+      wordCountBtn.setAttribute('aria-pressed', String(enabled));
+      wordCountBtn.title = enabled ? 'Hide Word Count' : 'Show Word Count';
+      view.focus();
+    });
+    toolbar.appendChild(wordCountBtn);
   }
 
   // Add focus mode toggle button
@@ -331,10 +351,10 @@ export const toolbarTheme = EditorView.baseTheme({
  * @returns {Extension[]} Array of extensions including panel and styles
  */
 export function toolbar(options = {}) {
-  const { onToggleMode, onToggleLineNumbers, onToggleScrollPastEnd, onToggleReadOnly, onToggleTypewriter, onToggleFocusMode } = options;
+  const { onToggleMode, onToggleLineNumbers, onToggleScrollPastEnd, onToggleReadOnly, onToggleTypewriter, onToggleFocusMode, onToggleWordCount } = options;
 
   const panelPlugin = showPanel.of((view) => {
-    const { dom, updateHistoryButtons } = createToolbarDOM(view, { onToggleMode, onToggleLineNumbers, onToggleScrollPastEnd, onToggleReadOnly, onToggleTypewriter, onToggleFocusMode });
+    const { dom, updateHistoryButtons } = createToolbarDOM(view, { onToggleMode, onToggleLineNumbers, onToggleScrollPastEnd, onToggleReadOnly, onToggleTypewriter, onToggleFocusMode, onToggleWordCount });
     return {
       dom,
       top: true,
