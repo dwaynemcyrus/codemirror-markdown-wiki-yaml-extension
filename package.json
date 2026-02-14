@@ -1,6 +1,6 @@
 {
   "name": "codemirror-for-writers",
-  "version": "1.3.0",
+  "version": "1.7.0",
   "type": "module",
   "description": "A CodeMirror 6 extension for hybrid markdown editing - shows rendered preview for unfocused lines and raw markdown for the line being edited",
   "main": "./dist/index.cjs",
@@ -56,6 +56,7 @@
     "@codemirror/language": "^6.12.1",
     "@codemirror/search": "^6.6.0",
     "@lezer/highlight": "^1.2.3",
+    "js-yaml": "^4.1.1",
     "katex": "^0.16.27",
     "markdown-it": "^14.1.0",
     "markdown-it-emoji": "^3.0.0",

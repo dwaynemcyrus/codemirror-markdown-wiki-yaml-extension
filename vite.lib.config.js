@@ -24,6 +24,7 @@ export default defineConfig({
         '@codemirror/lang-json',
         '@lezer/highlight',
         'katex',
+        'js-yaml',
         'markdown-it',
         'markdown-it-emoji',
       ],

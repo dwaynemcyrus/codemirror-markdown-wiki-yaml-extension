@@ -1,3 +1,14 @@
+---
+title: Hybrid Markdown Editor
+author: CodeMirror for Writers
+date: 2025-01-15
+tags:
+  - markdown
+  - editor
+  - codemirror
+draft: false
+---
+
 # Hybrid Markdown Editor
 
 A [markdown](https://www.markdownguide.org/cheat-sheet/#basic-syntax) editor that shows the preview of the lines you aren't editing. No need to switch between edit and preview modes so much.
