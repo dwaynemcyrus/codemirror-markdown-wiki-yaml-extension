@@ -8,6 +8,7 @@ import {
   toggleTypewriter,
   toggleFocusMode,
   toggleWordCount,
+  tagAutocomplete,
 } from '../lib/index.js';
 import { toolbar } from './toolbar.js';
 import {
@@ -75,10 +76,23 @@ const state = EditorState.create({
         wikiLinkTelemetry.clicks.push(link);
         console.info('Wiki link clicked', { link, resolved });
       },
+      enableTags: true,
+      onTagClick: (tag) => {
+        console.info('Tag clicked', tag);
+      },
     }),
 
     // App-layer wiki link autocomplete (demo only)
     wikiLinkAutocomplete({ noteIndex }),
+
+    // Tag autocomplete
+    tagAutocomplete({
+      tags: [
+        'markdown', 'editor', 'codemirror', 'codemirror/extension', 'codemirror/view',
+        'javascript', 'typescript', 'project', 'project/active', 'project/archived',
+        'todo', 'done', 'idea', 'bug', 'feature', 'documentation',
+      ],
+    }),
 
     // Optional: Add the toolbar with toggle callback
     toolbar({

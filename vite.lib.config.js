@@ -25,6 +25,8 @@ export default defineConfig({
         '@lezer/highlight',
         'katex',
         'js-yaml',
+        '@codemirror/autocomplete',
+        '@codemirror/search',
         'markdown-it',
         'markdown-it-emoji',
       ],

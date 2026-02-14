@@ -93,6 +93,12 @@ Check out [codemirror-markdown-hybrid](https://github.com/tiagosimoes/codemirror
 
 ![Sample Image](sample-image.jpg)
 
+### Tags
+
+Inline tags render as pills: #markdown #editor #codemirror/extension
+
+Type `#` to trigger tag autocomplete.
+
 ### Wiki Links
 
 See [[Project Plan]] for the roadmap.
