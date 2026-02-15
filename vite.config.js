@@ -4,7 +4,7 @@ export default defineConfig({
   root: 'demo',
   base: '/codemirror-for-writers/',
   build: {
-    outDir: '../dist',
+    outDir: '../dist-demo',
   },
   server: {
     port: 3000,

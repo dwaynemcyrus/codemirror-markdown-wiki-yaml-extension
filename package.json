@@ -1,16 +1,14 @@
 {
   "name": "codemirror-for-writers",
-  "version": "1.7.0",
+  "version": "1.9.0",
   "type": "module",
   "description": "A CodeMirror 6 extension for hybrid markdown editing - shows rendered preview for unfocused lines and raw markdown for the line being edited",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
   "files": [
@@ -21,6 +19,7 @@
     "dev": "vite demo",
     "build": "vite build",
     "build:lib": "vite build --config vite.lib.config.js",
+    "prepublishOnly": "npm run build:lib",
     "preview": "vite preview demo",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
@@ -33,7 +32,10 @@
     "editor",
     "preview",
     "hybrid",
-    "wysiwyg"
+    "wysiwyg",
+    "writing",
+    "wiki-links",
+    "frontmatter"
   ],
   "author": "",
   "license": "MIT",
@@ -45,7 +47,22 @@
     "@codemirror/commands": "^6.0.0",
     "@codemirror/lang-markdown": "^6.0.0",
     "@codemirror/state": "^6.0.0",
-    "@codemirror/view": "^6.0.0"
+    "@codemirror/view": "^6.0.0",
+    "@codemirror/autocomplete": "^6.0.0",
+    "@codemirror/search": "^6.0.0",
+    "katex": "^0.16.0",
+    "mermaid": "^11.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@codemirror/autocomplete": {
+      "optional": true
+    },
+    "katex": {
+      "optional": true
+    },
+    "mermaid": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@codemirror/lang-css": "^6.3.1",
@@ -54,21 +71,21 @@
     "@codemirror/lang-json": "^6.0.2",
     "@codemirror/lang-python": "^6.2.1",
     "@codemirror/language": "^6.12.1",
-    "@codemirror/search": "^6.6.0",
     "@lezer/highlight": "^1.2.3",
     "js-yaml": "^4.1.1",
-    "katex": "^0.16.27",
     "markdown-it": "^14.1.0",
-    "markdown-it-emoji": "^3.0.0",
-    "mermaid": "^11.12.2"
+    "markdown-it-emoji": "^3.0.0"
   },
   "devDependencies": {
     "@codemirror/autocomplete": "^6.20.0",
     "@codemirror/commands": "^6.6.0",
     "@codemirror/lang-markdown": "^6.3.0",
+    "@codemirror/search": "^6.6.0",
     "@codemirror/state": "^6.4.0",
     "@codemirror/view": "^6.33.0",
     "@playwright/test": "^1.58.0",
+    "katex": "^0.16.27",
+    "mermaid": "^11.12.2",
     "puppeteer": "^24.36.0",
     "vite": "^5.4.0"
   }

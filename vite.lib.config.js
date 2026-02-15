@@ -28,6 +28,7 @@ export default defineConfig({
         '@codemirror/search',
         'markdown-it',
         'markdown-it-emoji',
+        'mermaid',
       ],
       output: {
         // Provide global variables for UMD build
@@ -40,6 +41,7 @@ export default defineConfig({
       },
     },
     outDir: 'dist',
+    emptyOutDir: true,
     sourcemap: true,
   },
 });

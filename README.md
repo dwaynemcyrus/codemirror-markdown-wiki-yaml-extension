@@ -1,9 +1,8 @@
 # codemirror-for-writers
 
 [![npm version](https://img.shields.io/npm/v/codemirror-for-writers.svg)](https://www.npmjs.com/package/codemirror-for-writers)
-[![Tests](https://github.com/dwaynemcyrus/codemirror-for-writers/actions/workflows/test.yml/badge.svg)](https://github.com/dwaynemcyrus/codemirror-for-writers/actions/workflows/test.yml)
 
-A CodeMirror 6 extension for hybrid markdown editing - shows rendered preview for unfocused lines and raw markdown for the line or block being edited, with custom task types for writers.
+A CodeMirror 6 extension for hybrid markdown editing — shows rendered preview for unfocused lines and raw markdown for the line being edited. Designed for writing apps like Bear, Obsidian, and iA Writer.
 
 ## Demo
 
@@ -13,11 +12,30 @@ Try it live: [**Live Demo**](https://dwaynemcyrus.github.io/codemirror-for-write
 
 ## Install
 
+This extension requires [CodeMirror 6](https://codemirror.net/). Install CodeMirror and the extension together:
+
 ```bash
-npm install codemirror-for-writers @codemirror/state @codemirror/view
+npm install codemirror-for-writers @codemirror/state @codemirror/view @codemirror/commands @codemirror/lang-markdown @codemirror/search
 ```
 
-## Usage
+### Optional Dependencies
+
+The following peer dependencies are **not** installed automatically. Install only the ones you need:
+
+```bash
+# Autocomplete — required for wiki link and tag autocomplete
+npm install @codemirror/autocomplete
+
+# Math rendering — required for KaTeX math blocks ($inline$ and $$block$$)
+npm install katex
+
+# Diagram rendering — required for Mermaid diagram blocks
+npm install mermaid
+```
+
+Features that depend on optional packages will simply not render if the package is not installed.
+
+## Quick Start
 
 ```javascript
 import { EditorState } from '@codemirror/state';
@@ -25,8 +43,15 @@ import { EditorView } from '@codemirror/view';
 import { hybridMarkdown } from 'codemirror-for-writers';
 
 const state = EditorState.create({
-  doc: '# Hello World',
-  extensions: [hybridMarkdown({ theme: 'light' })],
+  doc: '# Hello World\n\nStart writing...',
+  extensions: [
+    hybridMarkdown({
+      theme: 'light',
+      enableWikiLinks: true,
+      enableTags: true,
+      wordCount: true,
+    }),
+  ],
 });
 
 const view = new EditorView({ state, parent: document.body });
@@ -34,18 +59,56 @@ const view = new EditorView({ state, parent: document.body });
 
 ## Features
 
-- Hybrid preview - rendered markdown for unfocused lines, raw editing for current line
-- Collapsible headings - click the chevron to collapse/expand sections
+### Hybrid Preview
+Unfocused lines render as formatted markdown (headings, bold, italic, links, images, code blocks, tables, task lists). Click a line to edit the raw markdown. Transitions are animated with smooth fade-ins.
+
+### Collapsible Headings
+Click the chevron next to any heading to collapse or expand the section beneath it.
+
+### Inline Image Preview
+`![alt](url)` lines render as actual images when unfocused. Click to edit the raw markdown.
+
+### Wiki Links
+`[[title]]`, `[[title|alias]]`, `[[title#section]]`, and `[[title#section|alias]]` are parsed and rendered as clickable links in preview. Provide an `onWikiLinkClick` handler to navigate.
+
+### Tag System
+`#tag` and `#tag/subtag` are rendered as styled pills in preview. Provide an `onTagClick` handler for click behavior.
+
+### YAML Frontmatter Editor
+YAML frontmatter blocks render as a structured key-value property table when unfocused. Click to edit raw YAML.
+
+### Writing Modes
+- **Typewriter Mode** — keeps the active line vertically centered as you type
+- **Focus Mode** — dims all text except the current paragraph to 25% opacity
+
+### Word Count Panel
+Toggleable status bar showing live word count, character count, and estimated reading time.
+
+### Backlinks Panel
+Bottom panel showing incoming links to the current document. Provide an async `onBacklinksRequested(docTitle)` resolver to fetch backlink data.
+
+### Custom Task Types
+Beyond standard `[x]` checkboxes, supports emoji-based task types: `[i]` info, `[!]` important, `[?]` question, `[*]` star, `[>]` forward, `[<]` schedule. Task types cycle on click.
+
+### Additional
 - Light and dark themes with dynamic switching
-- Keyboard shortcuts (Ctrl+B, Ctrl+I, Ctrl+K, etc.)
-- Syntax highlighted code blocks
-- Custom task types with emoji indicators (e.g. `[i]`, `[!]`, `[*]`)
-- Tables, task lists, math (KaTeX), mermaid diagrams, and more
-- Wiki links in preview (`[[title]]`, `[[title|alias]]`, `[[title#section]]`, `[[title#section|alias]]`)
+- Syntax-highlighted code blocks (JavaScript, Python, CSS, HTML, JSON)
+- Math rendering with KaTeX (`$inline$` and `$$block$$`)
+- Mermaid diagram rendering
+- Emoji shortcodes (`:smile:` → 😄)
+- Tables, blockquotes, horizontal rules
+- Read-only mode (task toggles still work)
+- Raw markdown mode toggle
 
-### Wiki Links (App Layer)
+## Keyboard Shortcuts
 
-This package only handles wiki-link parsing, rendering, and styling inside the editor. Autocomplete, link resolution, and note indexing are app-specific and should live outside the extension. The demo includes a small companion autocomplete plugin in `demo/wiki-link-autocomplete.js` to show the intended separation.
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl/Cmd+B` | Bold |
+| `Ctrl/Cmd+I` | Italic |
+| `Ctrl/Cmd+K` | Link |
+| `` Ctrl/Cmd+` `` | Inline code |
+| `` Ctrl/Cmd+Shift+` `` | Code block |
 
 ## API
 
@@ -55,42 +118,162 @@ Main extension function. Returns an array of CodeMirror extensions.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `theme` | `'light'` \| `'dark'` | `'light'` | Initial theme |
+| `theme` | `'light' \| 'dark'` | `'light'` | Initial theme |
 | `enablePreview` | `boolean` | `true` | Enable hybrid preview |
 | `enableKeymap` | `boolean` | `true` | Enable markdown shortcuts |
 | `enableCollapse` | `boolean` | `true` | Enable collapsible headings |
-| `enableCustomTasks` | `boolean` | `false` | Enable custom task types in preview |
+| `enableCustomTasks` | `boolean` | `false` | Enable custom task types |
 | `customTaskTypes` | `string[]` | `['i','!','?','*','>','<']` | Custom task type order |
-| `enableWikiLinks` | `boolean` | `false` | Enable wiki-link parsing/highlighting in hybrid preview |
-| `renderWikiLinks` | `boolean` | `true` | Render wiki links in preview when enabled |
-| `onWikiLinkClick` | `(link) => void` | `undefined` | Optional handler for preview wiki-link clicks (only active when provided) |
-| `readOnly` | `boolean` | `false` | Enable read-only mode (task toggles still allowed) |
+| `enableWikiLinks` | `boolean` | `false` | Enable wiki-link rendering |
+| `renderWikiLinks` | `boolean` | `true` | Render wiki links in preview |
+| `onWikiLinkClick` | `(link) => void` | — | Handler for wiki-link clicks |
+| `enableTags` | `boolean` | `false` | Enable tag pill rendering |
+| `onTagClick` | `(tag) => void` | — | Handler for tag clicks |
+| `readOnly` | `boolean` | `false` | Read-only mode |
+| `typewriter` | `boolean` | `false` | Typewriter mode |
+| `focusMode` | `boolean` | `false` | Focus mode |
+| `wordCount` | `boolean` | `false` | Show word count panel |
+| `backlinks` | `boolean` | `false` | Show backlinks panel |
+| `docTitle` | `string` | — | Document title for backlinks (falls back to frontmatter `title`) |
+| `onBacklinksRequested` | `(title) => Promise<Array>` | — | Async resolver returning backlinks |
+| `onBacklinkClick` | `(backlink) => void` | — | Handler for backlink clicks |
 
-### Theme & Mode Functions
+### Runtime Toggle Functions
 
-- `toggleTheme(view)` - Toggle between light/dark themes, returns `true` if now dark
-- `toggleHybridMode(view)` - Toggle between hybrid/raw mode, returns `true` if hybrid
-- `setTheme(view, theme)` - Set theme explicitly (`'light'` or `'dark'`)
-- `setMode(view, mode)` - Set mode explicitly (`'hybrid'` or `'raw'`)
+All toggle functions accept an `EditorView` and return the new state.
 
-### Read-only Functions
+```javascript
+import {
+  toggleTheme, setTheme, getTheme,
+  toggleHybridMode, setMode, getMode,
+  toggleReadOnly, setReadOnly, isReadOnly,
+  toggleTypewriter, setTypewriter, isTypewriter,
+  toggleFocusMode, setFocusMode, isFocusMode,
+  toggleWordCount, setWordCount, isWordCount,
+  toggleBacklinks, setBacklinks, isBacklinks,
+} from 'codemirror-for-writers';
 
-- `toggleReadOnly(view)` - Toggle read-only, returns `true` if now read-only
-- `setReadOnly(view, readOnly)` - Set read-only explicitly
-- `isReadOnly(view)` - Get current read-only state
+toggleTheme(view);         // returns true if now dark
+toggleHybridMode(view);    // returns true if now hybrid
+toggleReadOnly(view);      // returns true if now read-only
+toggleTypewriter(view);    // returns true if now enabled
+toggleFocusMode(view);     // returns true if now enabled
+toggleWordCount(view);     // returns true if now shown
+toggleBacklinks(view);     // returns true if now shown
+```
 
 ### Actions
 
-The `actions` export provides formatting functions for building custom toolbars:
+Formatting functions for building custom toolbars:
 
 ```javascript
 import { actions } from 'codemirror-for-writers';
 
-// Available actions: undo, redo, search, replace, selectNextOccurrence, selectAllOccurrences, bold, italic, strikethrough, h1, h2, h3,
-// link, image, bulletList, numberedList, taskList, inlineCode,
-// codeBlock, hr, quote, table, diagram, emoji
+// Text formatting
 actions.bold(view);
+actions.italic(view);
+actions.strikethrough(view);
+actions.inlineCode(view);
+
+// Block elements
+actions.h1(view);  actions.h2(view);  actions.h3(view);
+actions.quote(view);
+actions.codeBlock(view);
+actions.hr(view);
+actions.table(view);
+actions.diagram(view);
+
+// Lists
+actions.bulletList(view);
+actions.numberedList(view);
+actions.taskList(view);
+
+// Insertions
+actions.link(view);
+actions.image(view);
+actions.emoji(view);
+
+// Edit operations
+actions.undo(view);
+actions.redo(view);
+actions.search(view);
+actions.replace(view);
+actions.selectNextOccurrence(view);
+actions.selectAllOccurrences(view);
 ```
+
+### Wiki Link Autocomplete
+
+```javascript
+import { autocompletion } from '@codemirror/autocomplete';
+import { hybridMarkdown, createNoteIndex, wikiLinkAutocomplete } from 'codemirror-for-writers';
+
+const notes = [
+  { title: 'My Note', aliases: ['alias1'] },
+  { title: 'Another Note' },
+];
+
+const noteIndex = createNoteIndex(notes);
+
+const state = EditorState.create({
+  doc: '',
+  extensions: [
+    hybridMarkdown({ enableWikiLinks: true }),
+    autocompletion({ override: [wikiLinkAutocomplete({ noteIndex })] }),
+  ],
+});
+```
+
+### Tag Autocomplete
+
+```javascript
+import { autocompletion } from '@codemirror/autocomplete';
+import { hybridMarkdown, tagAutocomplete } from 'codemirror-for-writers';
+
+const state = EditorState.create({
+  doc: '',
+  extensions: [
+    hybridMarkdown({ enableTags: true }),
+    autocompletion({
+      override: [tagAutocomplete({ tags: ['writing', 'draft', 'ideas/new'] })],
+    }),
+  ],
+});
+```
+
+### Backlinks
+
+```javascript
+import { hybridMarkdown } from 'codemirror-for-writers';
+
+const state = EditorState.create({
+  doc: '---\ntitle: My Document\n---\n\nContent here.',
+  extensions: [
+    hybridMarkdown({
+      backlinks: true,
+      onBacklinksRequested: async (title) => {
+        // Fetch from your app's data store
+        return [
+          { title: 'Linking Note', excerpt: 'References this document...' },
+        ];
+      },
+      onBacklinkClick: (backlink) => {
+        // Navigate to the linking document
+        console.log('Navigate to:', backlink.title);
+      },
+    }),
+  ],
+});
+```
+
+## Publishing
+
+```bash
+npm login
+npm publish
+```
+
+The `prepublishOnly` script runs `npm run build:lib` automatically before publishing.
 
 ## License
 
