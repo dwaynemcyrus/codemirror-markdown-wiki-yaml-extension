@@ -9,23 +9,13 @@ Feature recommendations for combining Bear's writing experience, Obsidian's prop
 - [x] **Typography & Spacing Overhaul** - Charter serif font, 17px/1.75 line height, wider margins, refined heading colors, gradient HRs *(v1.7.0)*
 - [x] **YAML Frontmatter / Properties Editor** - Obsidian-style key-value table with inline editing, js-yaml round-trip *(v1.8.0)*
 - [x] **Word/Character/Reading Time Counter** - Toggleable status bar with live word, character, and reading time stats *(v1.8.0)*
+- [x] **Inline Image Preview** - Render `![alt](url)` as actual images with lazy loading and error handling *(v1.9.0)*
+- [x] **Tag System with Autocomplete** - `#tag` and `#tag/subtag` rendered as styled pills, with completion source API *(v1.9.0)*
+- [x] **Smooth Preview Transitions** - CSS fade-in animations on preview/focus state changes *(v1.9.0)*
+- [x] **Link Autocomplete Enhancement** - Wiki-link autocomplete promoted to first-class library export *(v1.9.0)*
+- [x] **Backlinks / Linked Mentions API** - Bottom panel with async `onBacklinksRequested(docTitle)` resolver *(v1.9.0)*
 
 ## Not Yet Implemented
-
-### High Priority
-
-| # | Feature | Effort | Impact | Source |
-|---|---------|--------|--------|--------|
-| 6 | Inline Image Preview | Medium | Medium | Bear |
-
-### Medium Priority
-
-| # | Feature | Effort | Impact | Source |
-|---|---------|--------|--------|--------|
-| 7 | Tag System with Autocomplete | Medium | Medium | Obsidian |
-| 8 | Smooth Preview Transitions | Low | Medium | Bear |
-| 9 | Link Autocomplete Enhancement | Low | Medium | Obsidian |
-| 10 | Backlinks / Linked Mentions API | Medium | Medium | Obsidian |
 
 ### Lower Priority
 
