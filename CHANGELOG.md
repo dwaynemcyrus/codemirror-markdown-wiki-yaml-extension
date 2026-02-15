@@ -1,5 +1,29 @@
 # Changelog
 
+## v1.9.0
+
+### Added
+- Inline image preview: `![alt](url)` renders as an actual image when unfocused, raw markdown when editing.
+- Tag system: `#tag` and `#tag/subtag` rendered as styled pills in preview with `onTagClick` handler.
+- Tag autocomplete: `tagAutocomplete({ tags })` completion source for `@codemirror/autocomplete`.
+- Smooth preview transitions: CSS fade-in animations on all preview/focus state changes.
+- Wiki link autocomplete promoted to library: `createNoteIndex()`, `resolveWikiLink()`, `wikiLinkAutocomplete()` exported as first-class APIs.
+- Backlinks / linked mentions API: bottom panel with async `onBacklinksRequested(docTitle)` resolver and `onBacklinkClick` handler.
+- Backlinks runtime controls: `toggleBacklinks()`, `setBacklinks()`, `isBacklinks()`.
+
+### Changed
+- Wiki link autocomplete moved from `demo/wiki-link-autocomplete.js` to `lib/extensions/wiki-link-autocomplete.js`.
+- README rewritten with full feature list, API reference, install instructions, and usage examples.
+- npm packaging overhauled: separated demo/lib build outputs, reorganized peer dependencies, added `prepublishOnly` script.
+- `mermaid`, `katex`, and `@codemirror/autocomplete` are now optional peer dependencies (not bundled).
+
+## v1.8.0
+
+### Added
+- YAML frontmatter / properties editor: renders YAML as a structured key-value table when unfocused, raw YAML when focused. Uses js-yaml for round-trip parsing.
+- Word count panel: toggleable status bar with live word count, character count, and estimated reading time.
+- Word count runtime controls: `toggleWordCount()`, `setWordCount()`, `isWordCount()`.
+
 ## v1.7.0
 
 ### Added
