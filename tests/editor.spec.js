@@ -32,9 +32,8 @@ test.describe('Hybrid Markdown Editor', () => {
     await expect(page.locator('.cm-content')).toBeVisible();
   });
 
-  test('should render bottom toolbar and more menu', async ({ page }) => {
-    await expect(page.locator('.cm-bottom-toolbar')).toBeVisible();
-    await expect(page.locator('.cm-bottom-toolbar-btn').first()).toBeVisible();
+  test('should render more menu (toolbar off by default)', async ({ page }) => {
+    await expect(page.locator('.cm-bottom-toolbar')).toHaveCount(0);
     await expect(page.locator('.cm-more-menu-trigger')).toBeVisible();
   });
 
@@ -288,6 +287,10 @@ test.describe('Bottom Toolbar Actions', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/#empty');
     await page.waitForSelector('.cm-editor');
+    // Toolbar is off by default — enable it via the more menu
+    await clickMoreMenuItem(page, 'Toolbar');
+    await closeMoreMenu(page);
+    await expect(page.locator('.cm-bottom-toolbar')).toBeVisible();
     await page.locator('.cm-content').click();
   });
 
@@ -415,11 +418,11 @@ test.describe('More Menu Toggles', () => {
   });
 
   test('should toggle bottom toolbar from more menu', async ({ page }) => {
-    await expect(page.locator('.cm-bottom-toolbar')).toBeVisible();
-    await clickMoreMenuItem(page, 'Toolbar');
     await expect(page.locator('.cm-bottom-toolbar')).toHaveCount(0);
     await clickMoreMenuItem(page, 'Toolbar');
     await expect(page.locator('.cm-bottom-toolbar')).toBeVisible();
+    await clickMoreMenuItem(page, 'Toolbar');
+    await expect(page.locator('.cm-bottom-toolbar')).toHaveCount(0);
   });
 
   test('should open properties sheet and add frontmatter', async ({ page }) => {

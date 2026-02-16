@@ -85,19 +85,7 @@ const state = EditorState.create({
       onTagClick: (tag) => {
         console.info('Tag clicked', tag);
       },
-      backlinks: true,
-      onBacklinksRequested: async (docTitle) => {
-        // Mock async resolver — in a real app, query your note database
-        console.info('Backlinks requested for:', docTitle);
-        return [
-          { title: 'Daily Log', excerpt: 'Referenced in today\'s entry' },
-          { title: 'Project Plan', excerpt: 'Linked from the overview section' },
-          { title: 'Meeting Notes', excerpt: 'Discussed in last sync' },
-        ];
-      },
-      onBacklinkClick: (backlink) => {
-        console.info('Backlink clicked', backlink);
-      },
+      toolbar: false,
       frontmatterKeys: ['title', 'date', 'tags', 'author', 'description', 'draft', 'category', 'slug', 'image', 'published'],
     }),
 
