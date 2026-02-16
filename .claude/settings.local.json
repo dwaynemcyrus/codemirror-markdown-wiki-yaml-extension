@@ -26,7 +26,10 @@
       "Bash(npm pack:*)",
       "Bash(timeout 8 npm run dev:*)",
       "Bash(npx vite build:*)",
-      "Bash(node -e:*)"
+      "Bash(node -e:*)",
+      "Bash(xargs:*)",
+      "Bash(npx playwright test:*)",
+      "Bash(node -c:*)"
     ]
   }
 }
