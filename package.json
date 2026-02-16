@@ -5,8 +5,10 @@
   "description": "A CodeMirror 6 extension for hybrid markdown editing - shows rendered preview for unfocused lines and raw markdown for the line being edited",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     }
@@ -17,8 +19,8 @@
   "scripts": {
     "dev": "vite demo",
     "build": "vite build",
-    "build:lib": "vite build --config vite.lib.config.js",
-    "prepublishOnly": "npm run build:lib",
+    "build:lib": "vite build --config vite.lib.config.js && cp lib/index.d.ts dist/index.d.ts",
+    "prepare": "npm run build:lib",
     "preview": "vite preview demo",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
@@ -48,12 +50,12 @@
   "homepage": "https://dwaynemcyrus.github.io/codemirror-for-writers/",
   "sideEffects": false,
   "peerDependencies": {
+    "@codemirror/autocomplete": "^6.0.0",
     "@codemirror/commands": "^6.0.0",
     "@codemirror/lang-markdown": "^6.0.0",
+    "@codemirror/search": "^6.0.0",
     "@codemirror/state": "^6.0.0",
     "@codemirror/view": "^6.0.0",
-    "@codemirror/autocomplete": "^6.0.0",
-    "@codemirror/search": "^6.0.0",
     "katex": "^0.16.0",
     "mermaid": "^11.0.0"
   },
@@ -76,6 +78,7 @@
     "@codemirror/lang-python": "^6.2.1",
     "@codemirror/language": "^6.12.1",
     "@lezer/highlight": "^1.2.3",
+    "codemirror-for-writers": "file:",
     "js-yaml": "^4.1.1",
     "markdown-it": "^14.1.0",
     "markdown-it-emoji": "^3.0.0"
