@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.10.0
+
+### Added
+- "More" menu: `moreMenu()` extension renders a `⋯` button (top-right) with a dropdown of toggle items (theme, mode, read-only, typewriter, focus, word count, properties).
+
+### Fixed
+- Bottom toolbar overscroll: horizontal swipes at scroll boundaries no longer trigger browser back/forward navigation on iOS/Safari (`overscroll-behavior-x: contain` + JS touchmove fallback).
+
 ## v1.9.0
 
 ### Added
