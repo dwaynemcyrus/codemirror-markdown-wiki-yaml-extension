@@ -1,5 +1,67 @@
 # PLANS
 
+## Feature: Default Toolbar + More Menu Toolbar Toggle (2026-02-16)
+
+Plan
+1. Make the bottom toolbar enabled by default in `hybridMarkdown()`.
+2. Add runtime API helpers for toolbar visibility (`toggleToolbar`, `setToolbar`, `isToolbar`).
+3. Wire a `Toolbar` toggle item into the demo `moreMenu`.
+4. Update typings/docs to reflect the new default and toggle API.
+5. Extend Playwright coverage for toolbar toggling via more menu.
+6. Run verification (`npm run build:lib`, Playwright tests).
+
+Expected Files
+- lib/index.js
+- lib/index.d.ts
+- demo/main.js
+- tests/editor.spec.js
+- README.md
+- docs/INTEGRATION.md
+- PLANS.md
+
+Risks
+- Apps that already add `bottomToolbar()` manually alongside `hybridMarkdown()` may now render duplicate toolbars unless they remove the extra extension or set `toolbar: false`.
+
+Verification
+- `npm run build:lib`
+- `npm test -- --workers=1`
+
+---
+
+## Maintenance: Canonicalize `lib/` + `demo/` and Stabilize Tooling (2026-02-16)
+
+Plan
+1. Make `lib/` + `demo/` the single active implementation path and remove legacy `src/` code.
+2. Align local scripts and Playwright config to a consistent demo host/port.
+3. Update Playwright tests to current UI contracts (`.cm-bottom-toolbar`, `.cm-more-menu-*`) and available controls.
+4. Fix CI drift: publish package name check and GitHub Pages artifact directory.
+5. Refresh stale docs to match current exported APIs and build outputs.
+6. Run verification: `npm run build:lib`, `npm test` (after installing Playwright browser binaries).
+
+Expected Files
+- package.json
+- playwright.config.js
+- vite.config.js
+- .github/workflows/publish.yml
+- .github/workflows/deploy.yml
+- tests/editor.spec.js
+- docs/README.md
+- docs/BUILD.md
+- docs/INTEGRATION.md
+- PLANS.md
+- src/** (removed)
+- index.html (removed)
+
+Risks
+- UI tests may still be sensitive to timing in menu/panel toggles.
+- Removing `src/` may break undocumented local flows that still depended on that path.
+
+Verification
+- `npm run build:lib`
+- `npm test`
+
+---
+
 ## Feature: Custom Task Types (Initial Pass)
 
 Plan

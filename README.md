@@ -59,6 +59,8 @@ const view = new EditorView({ state, parent: document.body });
 
 ## Features
 
+Most advanced features are opt-in. Start with `hybridMarkdown()` defaults (hybrid preview + bottom toolbar enabled), then enable only what your app needs.
+
 ### Hybrid Preview
 Unfocused lines render as formatted markdown (headings, bold, italic, links, images, code blocks, tables, task lists). Click a line to edit the raw markdown. Transitions are animated with smooth fade-ins.
 
@@ -85,16 +87,16 @@ YAML frontmatter blocks render as a structured key-value property table when unf
 Toggleable status bar showing live word count, character count, and estimated reading time.
 
 ### Backlinks Panel
-Bottom panel showing incoming links to the current document. Provide an async `onBacklinksRequested(docTitle)` resolver to fetch backlink data.
+Optional bottom panel showing incoming links to the current document. Enable with `backlinks: true` and provide async `onBacklinksRequested(title)` to load data from your app.
 
 ### Custom Task Types
 Beyond standard `[x]` checkboxes, supports emoji-based task types: `[i]` info, `[!]` important, `[?]` question, `[*]` star, `[>]` forward, `[<]` schedule. Task types cycle on click.
 
 ### Bottom Toolbar
-Mobile-friendly formatting toolbar at the bottom of the editor with undo/redo, text formatting, lists, and more. Horizontally scrollable with overscroll containment to prevent browser navigation gestures.
+Mobile-friendly formatting toolbar at the bottom of the editor with undo/redo, text formatting, lists, and more. Enabled by default in `hybridMarkdown()`. Horizontally scrollable with overscroll containment to prevent browser navigation gestures.
 
 ### More Menu
-A `⋯` button in the top-right corner of the editor that opens a dropdown with toggle items (theme, mode, read-only, typewriter, focus mode, word count, properties). Checkmarks indicate active state.
+Optional `⋯` menu extension in the top-right corner of the editor. You define all menu items (there is no built-in default item list). Checkmarks are controlled by each item's `getState(view)`.
 
 ### Additional
 - Light and dark themes with dynamic switching
@@ -138,10 +140,11 @@ Main extension function. Returns an array of CodeMirror extensions.
 | `readOnly` | `boolean` | `false` | Read-only mode |
 | `typewriter` | `boolean` | `false` | Typewriter mode |
 | `focusMode` | `boolean` | `false` | Focus mode |
+| `toolbar` | `boolean` | `true` | Show bottom formatting toolbar |
 | `wordCount` | `boolean` | `false` | Show word count panel |
-| `backlinks` | `boolean` | `false` | Show backlinks panel |
+| `backlinks` | `boolean` | `false` | Show backlinks panel (typically used with `onBacklinksRequested`) |
 | `docTitle` | `string` | — | Document title for backlinks (falls back to frontmatter `title`) |
-| `onBacklinksRequested` | `(title) => Promise<Array>` | — | Async resolver returning backlinks |
+| `onBacklinksRequested` | `(title) => Promise<Array>` | — | Async resolver returning backlinks data |
 | `onBacklinkClick` | `(backlink) => void` | — | Handler for backlink clicks |
 | `frontmatterKeys` | `string[]` | — | Known frontmatter keys for autocomplete in the properties sheet |
 
@@ -156,6 +159,7 @@ import {
   toggleReadOnly, setReadOnly, isReadOnly,
   toggleTypewriter, setTypewriter, isTypewriter,
   toggleFocusMode, setFocusMode, isFocusMode,
+  toggleToolbar, setToolbar, isToolbar,
   toggleWordCount, setWordCount, isWordCount,
   toggleBacklinks, setBacklinks, isBacklinks,
   toggleFrontmatterSheet, setFrontmatterSheet, isFrontmatterSheet,
@@ -166,6 +170,7 @@ toggleHybridMode(view);         // returns true if now hybrid
 toggleReadOnly(view);           // returns true if now read-only
 toggleTypewriter(view);         // returns true if now enabled
 toggleFocusMode(view);          // returns true if now enabled
+toggleToolbar(view);            // returns true if now shown
 toggleWordCount(view);          // returns true if now shown
 toggleBacklinks(view);          // returns true if now shown
 toggleFrontmatterSheet(view);   // returns true if now open
@@ -174,6 +179,7 @@ toggleFrontmatterSheet(view);   // returns true if now open
 ### `bottomToolbar(options?)`
 
 Bottom formatting toolbar. Returns an array of CodeMirror extensions.
+`hybridMarkdown()` already includes this toolbar by default. Use `toolbar: false` to disable it, or add `bottomToolbar(...)` manually only when you want custom button configuration outside the default setup.
 
 ```javascript
 import { bottomToolbar } from 'codemirror-for-writers';
@@ -196,13 +202,15 @@ bottomToolbar({
 ### `moreMenu(options?)`
 
 Dropdown menu button (⋯) positioned top-right of the editor. Returns an array of CodeMirror extensions.
+No menu items are added unless you provide them in `items`.
 
 ```javascript
-import { moreMenu, toggleTheme, getTheme } from 'codemirror-for-writers';
+import { moreMenu, toggleTheme, getTheme, toggleToolbar, isToolbar } from 'codemirror-for-writers';
 
 moreMenu({
   items: [
     { label: 'Dark mode', handler: (v) => toggleTheme(v), getState: (v) => getTheme(v) === 'dark' },
+    { label: 'Toolbar', handler: (v) => toggleToolbar(v), getState: (v) => isToolbar(v) },
   ],
 });
 ```

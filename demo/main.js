@@ -12,6 +12,8 @@ import {
   isTypewriter,
   toggleFocusMode,
   isFocusMode,
+  toggleToolbar,
+  isToolbar,
   toggleWordCount,
   isWordCount,
   toggleFrontmatterSheet,
@@ -20,13 +22,12 @@ import {
   createNoteIndex,
   resolveWikiLink,
   wikiLinkAutocomplete,
-  bottomToolbar,
   moreMenu,
 } from '../lib/index.js';
 import { autocompletion } from '@codemirror/autocomplete';
 import 'katex/dist/katex.min.css';
 import './styles.css';
-import exampleContent from './public/example.md?raw';
+import exampleContent from './example.md?raw';
 
 // Create the editor
 const container = document.getElementById('app');
@@ -112,9 +113,6 @@ const state = EditorState.create({
       ],
     }),
 
-    // Bottom toolbar with formatting buttons
-    bottomToolbar(),
-
     // More menu (top-right ⋯ button with toggle items)
     moreMenu({
       items: [
@@ -123,6 +121,7 @@ const state = EditorState.create({
         { label: 'Read-only', handler: (v) => toggleReadOnly(v), getState: (v) => isReadOnly(v) },
         { label: 'Typewriter', handler: (v) => toggleTypewriter(v), getState: (v) => isTypewriter(v) },
         { label: 'Focus mode', handler: (v) => toggleFocusMode(v), getState: (v) => isFocusMode(v) },
+        { label: 'Toolbar', handler: (v) => toggleToolbar(v), getState: (v) => isToolbar(v) },
         { label: 'Word count', handler: (v) => toggleWordCount(v), getState: (v) => isWordCount(v) },
         { label: 'Properties', handler: (v) => toggleFrontmatterSheet(v), getState: (v) => isFrontmatterSheet(v) },
       ],

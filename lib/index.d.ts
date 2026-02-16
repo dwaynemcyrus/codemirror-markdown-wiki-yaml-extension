@@ -67,6 +67,7 @@ export interface HybridMarkdownOptions {
   readOnly?: boolean;
   typewriter?: boolean;
   focusMode?: boolean;
+  toolbar?: boolean;
   wordCount?: boolean;
   backlinks?: boolean;
   docTitle?: string;
@@ -111,6 +112,14 @@ export function isTypewriter(view: EditorView): boolean;
 export function toggleFocusMode(view: EditorView): boolean;
 export function setFocusMode(view: EditorView, enabled: boolean): void;
 export function isFocusMode(view: EditorView): boolean;
+
+// ---------------------------------------------------------------------------
+// Toolbar
+// ---------------------------------------------------------------------------
+
+export function toggleToolbar(view: EditorView): boolean;
+export function setToolbar(view: EditorView, enabled: boolean): void;
+export function isToolbar(view: EditorView): boolean;
 
 // ---------------------------------------------------------------------------
 // Word count
