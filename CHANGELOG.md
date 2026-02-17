@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.11.0
+
+### Added
+- Callouts / admonitions: Obsidian-style `> [!type] Title` blocks with 12 built-in types (`note`, `abstract`, `info`, `tip`, `success`, `question`, `warning`, `failure`, `danger`, `bug`, `example`, `quote`), alias resolution, per-type SVG icons and colors, fold modifiers (`+`/`-`), and inline formatting support inside callout content.
+- Keyboard shortcuts for text formatting (`Cmd+B`, `Cmd+I`, `Cmd+Shift+X`, etc.), headings (`Cmd+1/2/3`), lists (`Cmd+Shift+7/8/9`), blockquotes, find & replace, and multi-selection.
+- Writing mode sheet: unified slide-up panel for toggling typewriter mode, focus mode, and intensity settings.
+
+### Fixed
+- Bottom toolbar now defaults to off (enable via `toolbar: true`).
+- Removed dark background and monospace font from selected lines — focused lines now keep the editor's serif font and default background.
+
+### Changed
+- README rewritten with comprehensive feature list covering all block elements, inline formatting, callouts, and extensions.
+- Demo content updated with callout examples for all 12 types and fold modifiers.
+
 ## v1.10.0
 
 ### Added
