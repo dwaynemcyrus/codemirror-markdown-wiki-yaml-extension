@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.11.1
+
+### Fixed
+- Removed self-referential `"codemirror-for-writers": "file:"` dependency that broke npm installs.
+- Replaced hardcoded `https://example.com` and `https://placehold.co` URLs in link/image actions with `url` placeholder.
+
+### Added
+- TypeScript declarations for 13 missing exports: `setFocusLevel`, `getFocusLevel`, `setDimIntensity`, `getDimIntensity`, `getWritingMode`, `setWritingMode`, `toggleWritingModeSheet`, `setWritingModeSheet`, `isWritingModeSheet`, `createFocusModePlugin`, `writingModeSheetPlugin`.
+- `.npmignore` to explicitly exclude demo, tests, and config from published package.
+- `CHANGELOG.md` included in published npm package.
+
 ## v1.11.0
 
 ### Added

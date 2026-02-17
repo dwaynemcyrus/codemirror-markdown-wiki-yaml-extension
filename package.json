@@ -1,6 +1,6 @@
 {
   "name": "codemirror-for-writers",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "type": "module",
   "description": "A CodeMirror 6 extension for hybrid markdown editing - shows rendered preview for unfocused lines and raw markdown for the line being edited",
   "main": "./dist/index.cjs",
@@ -14,7 +14,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "dev": "vite --config vite.config.js --host 127.0.0.1 --port 4173",
@@ -79,7 +80,6 @@
     "@codemirror/lang-python": "^6.2.1",
     "@codemirror/language": "^6.12.1",
     "@lezer/highlight": "^1.2.3",
-    "codemirror-for-writers": "file:",
     "js-yaml": "^4.1.1",
     "markdown-it": "^14.1.0",
     "markdown-it-emoji": "^3.0.0"

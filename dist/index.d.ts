@@ -112,6 +112,20 @@ export function isTypewriter(view: EditorView): boolean;
 export function toggleFocusMode(view: EditorView): boolean;
 export function setFocusMode(view: EditorView, enabled: boolean): void;
 export function isFocusMode(view: EditorView): boolean;
+export function setFocusLevel(view: EditorView, level: 'line' | 'sentence' | 'paragraph'): void;
+export function getFocusLevel(view: EditorView): 'line' | 'sentence' | 'paragraph';
+export function setDimIntensity(view: EditorView, intensity: number): void;
+export function getDimIntensity(view: EditorView): number;
+
+// ---------------------------------------------------------------------------
+// Writing mode
+// ---------------------------------------------------------------------------
+
+export function getWritingMode(view: EditorView): 'normal' | 'typewriter' | 'focus' | 'both';
+export function setWritingMode(view: EditorView, mode: 'normal' | 'typewriter' | 'focus' | 'both'): void;
+export function toggleWritingModeSheet(view: EditorView): boolean;
+export function setWritingModeSheet(view: EditorView, open: boolean): void;
+export function isWritingModeSheet(view: EditorView): boolean;
 
 // ---------------------------------------------------------------------------
 // Toolbar
@@ -204,6 +218,8 @@ export const markdownKeymap: Extension;
 export const highlightSelectedLines: Extension;
 export const typewriterPlugin: Extension;
 export const focusModePlugin: Extension;
+export function createFocusModePlugin(level?: 'line' | 'sentence' | 'paragraph', intensity?: number): Extension;
+export const writingModeSheetPlugin: Extension;
 export const wordCountPanel: Extension;
 export const backlinksPanel: Extension;
 export const frontmatterSheetPlugin: ViewPlugin<any>;

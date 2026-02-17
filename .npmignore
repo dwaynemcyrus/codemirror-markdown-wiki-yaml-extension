@@ -1,0 +1,27 @@
+# Source and demo
+demo/
+demo-video/
+lib/
+src/
+
+# Tests
+tests/
+playwright.config.js
+playwright-report/
+test-results/
+
+# Build configs
+vite.config.js
+vite.lib.config.js
+
+# Demo build output
+dist-demo/
+
+# Editor and CI
+.claude/
+.github/
+.gitignore
+
+# Screenshots
+*.png
+*.gif

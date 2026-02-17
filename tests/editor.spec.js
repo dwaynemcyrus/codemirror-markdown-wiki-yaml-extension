@@ -463,7 +463,7 @@ test.describe('Keyboard Shortcuts', () => {
     await page.keyboard.type('text');
     await page.keyboard.press(`${modifier}+a`);
     await page.keyboard.press(`${modifier}+k`);
-    await expect(page.locator('.cm-content')).toContainText('[text](https://example.com)');
+    await expect(page.locator('.cm-content')).toContainText('[text](url)');
   });
 
   test('should undo with keyboard shortcut', async ({ page }) => {
