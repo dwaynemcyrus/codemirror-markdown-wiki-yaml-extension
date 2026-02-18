@@ -377,6 +377,24 @@ test.describe('More Menu Toggles', () => {
     await expect(page.locator('.cm-markdown-preview .md-h1')).toHaveCount(0);
   });
 
+  test('should keep more menu accessible after toggling raw mode', async ({ page }) => {
+    // Toggle raw mode on
+    await clickMoreMenuItem(page, 'Raw mode');
+    await closeMoreMenu(page);
+
+    // More menu trigger should still be visible
+    await expect(page.locator('.cm-more-menu-trigger')).toBeVisible();
+
+    // Should be able to reopen the more menu
+    await ensureMoreMenuOpen(page);
+    await expect(page.locator('.cm-more-menu-dropdown')).toBeVisible();
+
+    // Toggle raw mode back off
+    await page.locator('.cm-more-menu-item', { hasText: 'Raw mode' }).click();
+    await closeMoreMenu(page);
+    await expect(page.locator('.cm-more-menu-trigger')).toBeVisible();
+  });
+
   test('should toggle dark mode from more menu', async ({ page }) => {
     await ensureMoreMenuOpen(page);
     const darkItem = page.locator('.cm-more-menu-item', { hasText: 'Dark mode' });

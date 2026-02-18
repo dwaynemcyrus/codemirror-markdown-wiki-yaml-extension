@@ -74,6 +74,7 @@ export interface HybridMarkdownOptions {
   onBacklinksRequested?: (title: string) => Promise<BacklinkEntry[]>;
   onBacklinkClick?: (backlink: BacklinkEntry) => void;
   frontmatterKeys?: string[];
+  scrollPastEnd?: boolean;
 }
 
 export function hybridMarkdown(options?: HybridMarkdownOptions): Extension[];
@@ -155,6 +156,14 @@ export interface BacklinkEntry {
 export function toggleBacklinks(view: EditorView): boolean;
 export function setBacklinks(view: EditorView, enabled: boolean): void;
 export function isBacklinks(view: EditorView): boolean;
+
+// ---------------------------------------------------------------------------
+// Scroll past end
+// ---------------------------------------------------------------------------
+
+export function toggleScrollPastEnd(view: EditorView): boolean;
+export function setScrollPastEnd(view: EditorView, enabled: boolean): void;
+export function isScrollPastEnd(view: EditorView): boolean;
 
 // ---------------------------------------------------------------------------
 // Frontmatter sheet
@@ -253,11 +262,23 @@ export function bottomToolbar(options?: {
   extraButtons?: BottomToolbarButton[];
 }): Extension[];
 
-export interface MoreMenuItem {
+export interface MoreMenuToggleItem {
   label: string;
-  handler: (view: EditorView) => boolean;
+  handler: (view: EditorView) => unknown;
   getState?: (view: EditorView) => boolean;
 }
+
+export interface MoreMenuActionItem {
+  type: 'action';
+  label: string;
+  handler: (view: EditorView) => unknown;
+}
+
+export interface MoreMenuSeparator {
+  type: 'separator';
+}
+
+export type MoreMenuItem = MoreMenuToggleItem | MoreMenuActionItem | MoreMenuSeparator;
 
 export function moreMenu(options?: {
   items?: MoreMenuItem[];
